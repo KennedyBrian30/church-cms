@@ -1,0 +1,1249 @@
+{% extends "base.html" %}
+{% block title %}Children's Ministry{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Children's Ministry</h1>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addChildModal">
+            <i class="fas fa-child"></i> Register Child
+        </button>
+        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#checkinModal">
+            <i class="fas fa-user-check"></i> Check-in
+        </button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Children</h5>
+                <h2 class="mb-0">58</h2>
+                <small>Registered in program</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h5 class="card-title">Average Attendance</h5>
+                <h2 class="mb-0">42</h2>
+                <small>Per Sunday</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <h5 class="card-title">Volunteers</h5>
+                <h2 class="mb-0">15</h2>
+                <small>8 teachers, 7 assistants</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title">Today's Check-ins</h5>
+                <h2 class="mb-0">38</h2>
+                <small>Current Sunday</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Age Group Distribution & Today's Attendance -->
+<div class="row">
+    <!-- Age Group Distribution -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Children by Age Group</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="ageDistributionChart" height="250"></canvas>
+                <div class="row mt-3 text-center">
+                    <div class="col">
+                        <div class="text-primary fw-bold">18</div>
+                        <small class="text-muted">0-2 Years</small>
+                    </div>
+                    <div class="col">
+                        <div class="text-success fw-bold">22</div>
+                        <small class="text-muted">3-5 Years</small>
+                    </div>
+                    <div class="col">
+                        <div class="text-info fw-bold">12</div>
+                        <small class="text-muted">6-8 Years</small>
+                    </div>
+                    <div class="col">
+                        <div class="text-warning fw-bold">6</div>
+                        <small class="text-muted">9-12 Years</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Attendance -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Today's Attendance (Feb 23, 2025)</h5>
+                <span class="badge bg-success">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-4">
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <div class="h3 text-primary mb-1">18</div>
+                            <small class="text-muted">Nursery</small>
+                            <div class="small text-success">✓ 15 checked in</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <div class="h3 text-success mb-1">22</div>
+                            <small class="text-muted">Pre-school</small>
+                            <div class="small text-success">✓ 18 checked in</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <div class="h3 text-info mb-1">12</div>
+                            <small class="text-muted">Elementary</small>
+                            <div class="small text-success">✓ 10 checked in</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <div class="h3 text-warning mb-1">6</div>
+                            <small class="text-muted">Pre-teens</small>
+                            <div class="small text-warning">⏰ 5 checked in</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress mb-3" style="height: 20px;">
+                    <div class="progress-bar bg-primary" style="width: 83%;">Nursery: 15/18</div>
+                    <div class="progress-bar bg-success" style="width: 82%;">Pre-school: 18/22</div>
+                    <div class="progress-bar bg-info" style="width: 83%;">Elementary: 10/12</div>
+                    <div class="progress-bar bg-warning" style="width: 83%;">Pre-teens: 5/6</div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Total Check-ins Today:</strong> 48/58 children (83% attendance)
+                    <div class="small mt-1">Last check-in: 10:15 AM (Wanjiku, Grace - Age 4)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Classes & Volunteers -->
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Classes & Volunteer Assignments</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Class Name</th>
+                                <th>Age Group</th>
+                                <th>Room</th>
+                                <th>Lead Teacher</th>
+                                <th>Assistant Teachers</th>
+                                <th>Current Children</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>Little Lambs Nursery</strong>
+                                    <div class="small text-muted">Ages 0-2 years</div>
+                                </td>
+                                <td>0-2 Years</td>
+                                <td>Room 101</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-primary text-white me-2" style="width: 30px; height: 30px; font-size: 0.8em;">
+                                            MW
+                                        </div>
+                                        <span>Mary Wanjiku</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-info text-white" style="width: 25px; height: 25px; font-size: 0.7em;">SW</span>
+                                        <span class="avatar-circle bg-info text-white" style="width: 25px; height: 25px; font-size: 0.7em;">+2</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">15</span>
+                                    <div class="small text-muted">Present today</div>
+                                </td>
+                                <td>20 children</td>
+                                <td><span class="badge bg-success">Good</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <strong>Rainbow Pre-school</strong>
+                                    <div class="small text-muted">Ages 3-5 years</div>
+                                </td>
+                                <td>3-5 Years</td>
+                                <td>Room 102</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-success text-white me-2" style="width: 30px; height: 30px; font-size: 0.8em;">
+                                            NW
+                                        </div>
+                                        <span>Naomi Wangila</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-info text-white" style="width: 25px; height: 25px; font-size: 0.7em;">GA</span>
+                                        <span class="avatar-circle bg-info text-white" style="width: 25px; height: 25px; font-size: 0.7em;">+3</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">18</span>
+                                    <div class="small text-muted">Present today</div>
+                                </td>
+                                <td>25 children</td>
+                                <td><span class="badge bg-success">Good</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <strong>Adventure Elementary</strong>
+                                    <div class="small text-muted">Ages 6-8 years</div>
+                                </td>
+                                <td>6-8 Years</td>
+                                <td>Room 103</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-info text-white me-2" style="width: 30px; height: 30px; font-size: 0.8em;">
+                                            SW
+                                        </div>
+                                        <span>Sharon Wekesa</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-info text-white" style="width: 25px; height: 25px; font-size: 0.7em;">DM</span>
+                                        <span class="badge bg-warning">Need 1 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">10</span>
+                                    <div class="small text-muted">Present today</div>
+                                </td>
+                                <td>15 children</td>
+                                <td><span class="badge bg-warning">Monitor</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <strong>Explorers Pre-teens</strong>
+                                    <div class="small text-muted">Ages 9-12 years</div>
+                                </td>
+                                <td>9-12 Years</td>
+                                <td>Room 104</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-warning text-white me-2" style="width: 30px; height: 30px; font-size: 0.8em;">
+                                            PA
+                                        </div>
+                                        <span>Peter Apaa</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-info text-white" style="width: 25px; height: 25px; font-size: 0.7em;">JC</span>
+                                        <span class="badge bg-danger">Need 2 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">5</span>
+                                    <div class="small text-muted">Present today</div>
+                                </td>
+                                <td>10 children</td>
+                                <td><span class="badge bg-danger">Needs Help</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Children List -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Registered Children</h5>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search children..." id="searchChildren">
+                    <select class="form-select form-select-sm" style="width: auto;" id="ageFilter">
+                        <option value="">All Ages</option>
+                        <option value="0-2">0-2 Years</option>
+                        <option value="3-5">3-5 Years</option>
+                        <option value="6-8">6-8 Years</option>
+                        <option value="9-12">9-12 Years</option>
+                    </select>
+                    <select class="form-select form-select-sm" style="width: auto;" id="classFilter">
+                        <option value="">All Classes</option>
+                        <option value="nursery">Little Lambs</option>
+                        <option value="preschool">Rainbow Pre-school</option>
+                        <option value="elementary">Adventure Elementary</option>
+                        <option value="preteens">Explorers Pre-teens</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="childrenTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Child</th>
+                                <th>Age</th>
+                                <th>Parents/Guardians</th>
+                                <th>Class Assignment</th>
+                                <th>Allergies/Notes</th>
+                                <th>Attendance %</th>
+                                <th>Today's Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Nursery Children -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-primary text-white me-3">
+                                            <i class="fas fa-baby"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Grace Wanjiku</strong>
+                                            <div class="small text-muted">ID: CH001</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>2 years</div>
+                                    <div class="small text-muted">Born: Jan 15, 2023</div>
+                                </td>
+                                <td>
+                                    <div>John Kamau</div>
+                                    <div class="small text-muted">0712 345 678</div>
+                                    <div class="small text-muted">Mary Wanjiku</div>
+                                </td>
+                                <td><span class="badge bg-primary">Little Lambs</span></td>
+                                <td>
+                                    <span class="badge bg-danger">Peanut Allergy</span>
+                                    <div class="small text-muted">Special needs: None</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 95%;"></div>
+                                    </div>
+                                    <div class="small text-muted">95% (38/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fas fa-check"></i> Checked In</span>
+                                    <div class="small text-muted">9:45 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-primary text-white me-3">
+                                            <i class="fas fa-baby"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Brian Omondi</strong>
+                                            <div class="small text-muted">ID: CH002</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>18 months</div>
+                                    <div class="small text-muted">Born: Aug 10, 2023</div>
+                                </td>
+                                <td>
+                                    <div>Kennedy Omondi</div>
+                                    <div class="small text-muted">0716 789 012</div>
+                                    <div class="small text-muted">Alice Akinyi</div>
+                                </td>
+                                <td><span class="badge bg-primary">Little Lambs</span></td>
+                                <td>
+                                    <span class="badge bg-warning">Lactose Intolerant</span>
+                                    <div class="small text-muted">Diaper size: Medium</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 88%;"></div>
+                                    </div>
+                                    <div class="small text-muted">88% (35/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fas fa-check"></i> Checked In</span>
+                                    <div class="small text-muted">10:05 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Pre-school Children -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-success text-white me-3">
+                                            <i class="fas fa-child"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Faith Wangila</strong>
+                                            <div class="small text-muted">ID: CH010</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>4 years</div>
+                                    <div class="small text-muted">Born: Mar 22, 2020</div>
+                                </td>
+                                <td>
+                                    <div>Benjamin Wanyonyi</div>
+                                    <div class="small text-muted">0714 567 890</div>
+                                    <div class="small text-muted">Naomi Wangila</div>
+                                </td>
+                                <td><span class="badge bg-success">Rainbow Pre-school</span></td>
+                                <td>
+                                    <span class="badge bg-info">Asthma</span>
+                                    <div class="small text-muted">Inhaler in backpack</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 92%;"></div>
+                                    </div>
+                                    <div class="small text-muted">92% (37/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fas fa-check"></i> Checked In</span>
+                                    <div class="small text-muted">9:30 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-success text-white me-3">
+                                            <i class="fas fa-child"></i>
+                                        </div>
+                                        <div>
+                                            <strong>David Wekesa</strong>
+                                            <div class="small text-muted">ID: CH015</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>5 years</div>
+                                    <div class="small text-muted">Born: Nov 5, 2019</div>
+                                </td>
+                                <td>
+                                    <div>David Ochieng</div>
+                                    <div class="small text-muted">0723 456 789</div>
+                                    <div class="small text-muted">Sharon Wekesa</div>
+                                </td>
+                                <td><span class="badge bg-success">Rainbow Pre-school</span></td>
+                                <td>
+                                    <div class="small text-muted">No allergies</div>
+                                    <div class="small text-muted">Loves arts & crafts</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" style="width: 75%;"></div>
+                                    </div>
+                                    <div class="small text-muted">75% (30/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning"><i class="fas fa-clock"></i> Not Yet</span>
+                                    <div class="small text-muted">Expected: 10:00 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Elementary Children -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-info text-white me-3">
+                                            <i class="fas fa-user-graduate"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Sarah Akinyi</strong>
+                                            <div class="small text-muted">ID: CH025</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>7 years</div>
+                                    <div class="small text-muted">Born: Jul 18, 2017</div>
+                                </td>
+                                <td>
+                                    <div>Grace Akinyi</div>
+                                    <div class="small text-muted">0728 901 234</div>
+                                    <div class="small text-muted">Single parent</div>
+                                </td>
+                                <td><span class="badge bg-info">Adventure Elementary</span></td>
+                                <td>
+                                    <span class="badge bg-danger">Bee Sting Allergy</span>
+                                    <div class="small text-muted">EPI-pen required</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 98%;"></div>
+                                    </div>
+                                    <div class="small text-muted">98% (39/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fas fa-check"></i> Checked In</span>
+                                    <div class="small text-muted">9:55 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-info text-white me-3">
+                                            <i class="fas fa-user-graduate"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Michael Mwangi</strong>
+                                            <div class="small text-muted">ID: CH028</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>8 years</div>
+                                    <div class="small text-muted">Born: Feb 14, 2016</div>
+                                </td>
+                                <td>
+                                    <div>David Mwangi</div>
+                                    <div class="small text-muted">0723 456 789</div>
+                                    <div class="small text-muted">Visitor family</div>
+                                </td>
+                                <td><span class="badge bg-info">Adventure Elementary</span></td>
+                                <td>
+                                    <div class="small text-muted">No medical issues</div>
+                                    <div class="small text-muted">New to church</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-info" style="width: 45%;"></div>
+                                    </div>
+                                    <div class="small text-muted">45% (9/20 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fas fa-check"></i> Checked In</span>
+                                    <div class="small text-muted">10:10 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Pre-teens -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-warning text-white me-3">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Joshua Apaa</strong>
+                                            <div class="small text-muted">ID: CH045</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>11 years</div>
+                                    <div class="small text-muted">Born: May 30, 2013</div>
+                                </td>
+                                <td>
+                                    <div>Peter Apaa</div>
+                                    <div class="small text-muted">0719 012 345</div>
+                                    <div class="small text-muted">Mary Okiror</div>
+                                </td>
+                                <td><span class="badge bg-warning">Explorers Pre-teens</span></td>
+                                <td>
+                                    <div class="small text-muted">No allergies</div>
+                                    <div class="small text-muted">Youth helper</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 90%;"></div>
+                                    </div>
+                                    <div class="small text-muted">90% (36/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fas fa-check"></i> Checked In</span>
+                                    <div class="small text-muted">9:40 AM</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-warning text-white me-3">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Esther Chepkoech</strong>
+                                            <div class="small text-muted">ID: CH048</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>12 years</div>
+                                    <div class="small text-muted">Born: Dec 8, 2012</div>
+                                </td>
+                                <td>
+                                    <div>Kipchoge Cheruiyot</div>
+                                    <div class="small text-muted">0724 567 890</div>
+                                    <div class="small text-muted">Jane Chepkoech</div>
+                                </td>
+                                <td><span class="badge bg-warning">Explorers Pre-teens</span></td>
+                                <td>
+                                    <span class="badge bg-info">Gluten Free</span>
+                                    <div class="small text-muted">Bible quiz team</div>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 85%;"></div>
+                                    </div>
+                                    <div class="small text-muted">85% (34/40 weeks)</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning"><i class="fas fa-clock"></i> Not Yet</span>
+                                    <div class="small text-muted">Usually arrives late</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Safety & Check-out -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Safety & Security</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    <strong>All systems operational</strong>
+                    <div class="small mt-1">Check-in/out system: Active • Volunteer background checks: Current</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">Child-to-Adult Ratio</h6>
+                                    <small class="text-muted">Current status</small>
+                                </div>
+                                <span class="badge bg-success">Safe</span>
+                            </div>
+                            <div class="mt-2">
+                                <div class="small">Nursery: 1:5 (Safe)</div>
+                                <div class="small">Pre-school: 1:7 (Safe)</div>
+                                <div class="small">Elementary: 1:8 (Monitor)</div>
+                                <div class="small">Pre-teens: 1:6 (Safe)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">Emergency Contacts</h6>
+                                    <small class="text-muted">Updated: This week</small>
+                                </div>
+                                <span class="badge bg-success">100%</span>
+                            </div>
+                            <div class="mt-2">
+                                <div class="small">58/58 children have emergency contacts</div>
+                                <div class="small">45/58 have secondary contacts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Emergency Protocol
+                    </button>
+                    <button class="btn btn-outline-warning">
+                        <i class="fas fa-file-medical me-2"></i>Medical Incident Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Check-out Queue</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-clock me-2"></i>
+                    <strong>Service ends at 12:00 PM</strong>
+                    <div class="small mt-1">Check-out begins in 45 minutes</div>
+                </div>
+                
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">Grace Wanjiku</h6>
+                            <small class="text-muted">Parents: John & Mary</small>
+                        </div>
+                        <button class="btn btn-sm btn-success">Check-out</button>
+                    </div>
+                    
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">Brian Omondi</h6>
+                            <small class="text-muted">Parent: Kennedy Omondi</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary">Waiting</button>
+                    </div>
+                    
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">Faith Wangila</h6>
+                            <small class="text-muted">Parent: Benjamin Wanyonyi</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary">Waiting</button>
+                    </div>
+                    
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">Sarah Akinyi</h6>
+                            <small class="text-muted">Parent: Grace Akinyi</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary">Waiting</button>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bulkCheckoutModal">
+                        <i class="fas fa-users me-2"></i>Bulk Check-out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Child Modal -->
+<div class="modal fade" id="addChildModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Register New Child</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Parent/Guardian</label>
+                            <select class="form-select" required>
+                                <option value="">Select Parent</option>
+                                <option value="1">John Kamau & Mary Wanjiku</option>
+                                <option value="2">Kennedy Omondi & Alice Akinyi</option>
+                                <option value="3">Benjamin Wanyonyi & Naomi Wangila</option>
+                                <option value="4">David Ochieng & Sharon Wekesa</option>
+                                <option value="5">Grace Akinyi (Single Parent)</option>
+                                <option value="6">Peter Apaa & Mary Okiror</option>
+                                <option value="7">Kipchoge Cheruiyot & Jane Chepkoech</option>
+                                <option value="new">Add New Parent...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Class Assignment</label>
+                            <select class="form-select" required>
+                                <option value="">Auto-assign by age</option>
+                                <option value="nursery">Little Lambs (0-2 years)</option>
+                                <option value="preschool">Rainbow Pre-school (3-5 years)</option>
+                                <option value="elementary">Adventure Elementary (6-8 years)</option>
+                                <option value="preteens">Explorers Pre-teens (9-12 years)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">Medical Information</label>
+                            <div class="mb-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="allergy_none">
+                                    <label class="form-check-label" for="allergy_none">No Allergies</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="allergy_peanut">
+                                    <label class="form-check-label" for="allergy_peanut">Peanut Allergy</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="allergy_dairy">
+                                    <label class="form-check-label" for="allergy_dairy">Dairy Allergy</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="allergy_gluten">
+                                    <label class="form-check-label" for="allergy_gluten">Gluten Intolerance</label>
+                                </div>
+                            </div>
+                            <textarea class="form-control" rows="2" placeholder="Other medical conditions, medications, special needs..."></textarea>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Emergency Contact</label>
+                            <input type="text" class="form-control" placeholder="Name" required>
+                            <input type="tel" class="form-control mt-2" placeholder="Phone Number" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Secondary Contact</label>
+                            <input type="text" class="form-control" placeholder="Name">
+                            <input type="tel" class="form-control mt-2" placeholder="Phone Number">
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="photoConsent">
+                                <label class="form-check-label" for="photoConsent">
+                                    I consent to photos/videos of my child being used for church ministry purposes
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="medicalConsent">
+                                <label class="form-check-label" for="medicalConsent">
+                                    I consent to emergency medical treatment if required
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Register Child</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Check-in Modal -->
+<div class="modal fade" id="checkinModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Check-in Child</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Search Child</label>
+                    <input type="text" class="form-control" placeholder="Enter child name or parent phone...">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Or Scan Tag/Code</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Scan barcode or enter tag ID">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="fas fa-qrcode"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Quick Check-in Options:</strong>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-primary me-2">Kamau Family (3 children)</button>
+                        <button class="btn btn-sm btn-outline-success">Omondi Family (2 children)</button>
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="printTags">
+                    <label class="form-check-label" for="printTags">
+                        Print security tags for all checked-in children
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Check-in</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bulk Check-out Modal -->
+<div class="modal fade" id="bulkCheckoutModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bulk Check-out</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Select Family/Group</label>
+                    <select class="form-select">
+                        <option value="">Select Family</option>
+                        <option value="kamau">Kamau Family (3 children)</option>
+                        <option value="omondi">Omondi Family (2 children)</option>
+                        <option value="wanyonyi">Wanyonyi Family (2 children)</option>
+                        <option value="wekesa">Wekesa Family (1 child)</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Or Select Children</label>
+                    <select class="form-select" multiple size="4">
+                        <option value="1">Grace Wanjiku (Nursery)</option>
+                        <option value="2">Brian Omondi (Nursery)</option>
+                        <option value="3">Faith Wangila (Pre-school)</option>
+                        <option value="4">David Wekesa (Pre-school)</option>
+                        <option value="5">Sarah Akinyi (Elementary)</option>
+                    </select>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="verifyIdentity">
+                    <label class="form-check-label" for="verifyIdentity">
+                        Verify parent/guardian identity
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Check-out Selected</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Age Distribution Chart
+new Chart(document.getElementById('ageDistributionChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['0-2 Years', '3-5 Years', '6-8 Years', '9-12 Years'],
+        datasets: [{
+            data: [18, 22, 12, 6],
+            backgroundColor: [
+                'rgba(13, 110, 253, 0.8)',
+                'rgba(40, 167, 69, 0.8)',
+                'rgba(23, 162, 184, 0.8)',
+                'rgba(255, 193, 7, 0.8)'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        let value = context.raw || 0;
+                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let percentage = Math.round((value / total) * 100);
+                        return `${label}: ${value} children (${percentage}%)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Table filtering
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchChildren');
+    const ageFilter = document.getElementById('ageFilter');
+    const classFilter = document.getElementById('classFilter');
+    const tableRows = document.querySelectorAll('#childrenTable tbody tr');
+    
+    function filterChildren() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const ageValue = ageFilter.value;
+        const classValue = classFilter.value;
+        
+        tableRows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const age = row.cells[1].textContent.toLowerCase();
+            const classAssignment = row.cells[3].textContent.toLowerCase();
+            
+            const matchesSearch = name.includes(searchTerm) || 
+                                 row.cells[2].textContent.toLowerCase().includes(searchTerm);
+            const matchesAge = !ageValue || age.includes(ageValue);
+            const matchesClass = !classValue || classAssignment.includes(classValue);
+            
+            row.style.display = matchesSearch && matchesAge && matchesClass ? '' : 'none';
+        });
+    }
+    
+    searchInput.addEventListener('input', filterChildren);
+    ageFilter.addEventListener('change', filterChildren);
+    classFilter.addEventListener('change', filterChildren);
+    
+    // Check-out button functionality
+    const checkoutButtons = document.querySelectorAll('.btn-sm.btn-success');
+    checkoutButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const childName = this.closest('tr').cells[0].textContent.trim();
+            if (confirm(`Check out ${childName}?`)) {
+                this.innerHTML = '<i class="fas fa-check"></i> Checked Out';
+                this.classList.remove('btn-success');
+                this.classList.add('btn-secondary');
+                this.disabled = true;
+            }
+        });
+    });
+    
+    // Update time every minute
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        document.querySelectorAll('.badge.bg-success .small.text-muted').forEach(el => {
+            if (el.textContent.includes('AM') || el.textContent.includes('PM')) {
+                el.textContent = timeString;
+            }
+        });
+    }
+    
+    setInterval(updateTime, 60000);
+});
+</script>
+
+<style>
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.avatar-group {
+    display: flex;
+    gap: 5px;
+}
+
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.avatar-circle i {
+    font-size: 1.2em;
+}
+
+.border.rounded {
+    border: 1px solid #dee2e6;
+}
+
+.text-center .border.rounded:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    cursor: pointer;
+}
+</style>
+{% endblock %}

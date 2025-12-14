@@ -1,0 +1,1049 @@
+{% extends "base.html" %}
+{% block title %}Church Communication{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Church Communication Center</h1>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sendMessageModal">
+            <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#scheduleMessageModal">
+            <i class="fas fa-clock"></i> Schedule
+        </button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Members</h5>
+                <h2 class="mb-0">80</h2>
+                <small>All communication groups</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h5 class="card-title">Messages Sent</h5>
+                <h2 class="mb-0">245</h2>
+                <small>This month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <h5 class="card-title">SMS Balance</h5>
+                <h2 class="mb-0">1,250</h2>
+                <small>Units remaining</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title">Response Rate</h5>
+                <h2 class="mb-0">68%</h2>
+                <small>Average engagement</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Communication Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-3">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-church me-2"></i>Sunday Reminder
+                    </button>
+                    <button class="btn btn-outline-success">
+                        <i class="fas fa-pray me-2"></i>Midweek Service
+                    </button>
+                    <button class="btn btn-outline-info">
+                        <i class="fas fa-bible me-2"></i>Bible Study
+                    </button>
+                    <button class="btn btn-outline-warning">
+                        <i class="fas fa-birthday-cake me-2"></i>Birthday Wishes
+                    </button>
+                    <button class="btn btn-outline-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Emergency Alert
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                        <i class="fas fa-hand-holding-usd me-2"></i>Offering Reminder
+                    </button>
+                    <button class="btn btn-outline-purple">
+                        <i class="fas fa-calendar-alt me-2"></i>Event Announcement
+                    </button>
+                    <button class="btn btn-outline-teal">
+                        <i class="fas fa-heart me-2"></i>Pastoral Care
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Communication Dashboard -->
+<div class="row">
+    <!-- Left Column: Message Composition & Groups -->
+    <div class="col-lg-8 mb-4">
+        <!-- Message Composition Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Compose Message</h5>
+            </div>
+            <div class="card-body">
+                <form id="messageForm">
+                    <div class="mb-3">
+                        <label class="form-label">Recipients</label>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge bg-primary">All Members (80)<i class="fas fa-times ms-1"></i></span>
+                            <span class="badge bg-success">Active Members (72)<i class="fas fa-times ms-1"></i></span>
+                            <span class="badge bg-info">Small Group A (22)<i class="fas fa-times ms-1"></i></span>
+                        </div>
+                        <select class="form-select" multiple id="recipientSelect">
+                            <option value="all">All Members (80)</option>
+                            <option value="active">Active Members (72)</option>
+                            <option value="inactive">Inactive Members (8)</option>
+                            <option value="visitors">Visitors (12)</option>
+                            <option value="group_a">Small Group A (22)</option>
+                            <option value="group_b">Small Group B (18)</option>
+                            <option value="group_c">Small Group C (25)</option>
+                            <option value="group_d">Small Group D (15)</option>
+                            <option value="youth">Youth Members (35)</option>
+                            <option value="volunteers">Volunteers (48)</option>
+                            <option value="choir">Choir Members (15)</option>
+                            <option value="ushers">Ushers (12)</option>
+                            <option value="custom">Custom Selection...</option>
+                        </select>
+                        <div class="form-text">Hold Ctrl/Cmd to select multiple groups</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message Type</label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="messageType" id="smsType" checked>
+                                <label class="form-check-label" for="smsType">
+                                    <i class="fas fa-sms text-primary"></i> SMS
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="messageType" id="emailType">
+                                <label class="form-check-label" for="emailType">
+                                    <i class="fas fa-envelope text-danger"></i> Email
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="messageType" id="whatsappType">
+                                <label class="form-check-label" for="whatsappType">
+                                    <i class="fab fa-whatsapp text-success"></i> WhatsApp
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="messageType" id="pushType">
+                                <label class="form-check-label" for="pushType">
+                                    <i class="fas fa-bell text-warning"></i> Push Notification
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message Template</label>
+                        <select class="form-select" id="templateSelect">
+                            <option value="">Select Template (Optional)</option>
+                            <option value="sunday">Sunday Service Reminder</option>
+                            <option value="midweek">Midweek Service</option>
+                            <option value="event">Event Announcement</option>
+                            <option value="birthday">Birthday Greeting</option>
+                            <option value="prayer">Prayer Request</option>
+                            <option value="giving">Giving Reminder</option>
+                            <option value="emergency">Emergency Alert</option>
+                            <option value="custom">Custom Template</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message Content</label>
+                        <textarea class="form-control" id="messageContent" rows="6" placeholder="Type your message here...">Hello church family! This is a reminder about our Sunday service tomorrow at 10:00 AM. Come expecting God's presence and bring a friend! Blessings, Pastor Wycliffe.</textarea>
+                        <div class="d-flex justify-content-between mt-2">
+                            <small class="text-muted" id="charCount">160 characters (1 SMS)</small>
+                            <small class="text-muted">Tokens: 0/5 remaining</small>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Schedule Send</label>
+                            <input type="datetime-local" class="form-control" id="scheduleTime">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select" id="prioritySelect">
+                                <option value="normal">Normal</option>
+                                <option value="high">High Priority</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary me-2" id="previewBtn">
+                            <i class="fas fa-eye me-1"></i> Preview
+                        </button>
+                        <button type="button" class="btn btn-success me-2" id="sendBtn">
+                            <i class="fas fa-paper-plane me-1"></i> Send Now
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="saveDraftBtn">
+                            <i class="fas fa-save me-1"></i> Save Draft
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Recent Messages -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Messages</h5>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search messages..." id="searchMessages">
+                    <select class="form-select form-select-sm" style="width: auto;" id="messageTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="sms">SMS</option>
+                        <option value="email">Email</option>
+                        <option value="whatsapp">WhatsApp</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="messagesTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Recipients</th>
+                                <th>Type</th>
+                                <th>Content Preview</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>Feb 19, 2025</div>
+                                    <div class="small text-muted">10:15 AM</div>
+                                </td>
+                                <td>
+                                    <div class="small">All Members</div>
+                                    <div class="text-muted">80 recipients</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary"><i class="fas fa-sms"></i> SMS</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;">
+                                        Midweek Bible study reminder tonight at 6 PM. Topic: The Power of Prayer...
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Delivered</span>
+                                    <div class="small text-muted">98% success</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div>Feb 18, 2025</div>
+                                    <div class="small text-muted">3:30 PM</div>
+                                </td>
+                                <td>
+                                    <div class="small">Small Group A</div>
+                                    <div class="text-muted">22 recipients</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success"><i class="fab fa-whatsapp"></i> WhatsApp</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;">
+                                        Group A meeting this Saturday at 4 PM at church. Bring your Bibles...
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Delivered</span>
+                                    <div class="small text-muted">100% success</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div>Feb 17, 2025</div>
+                                    <div class="small text-muted">9:00 AM</div>
+                                </td>
+                                <td>
+                                    <div class="small">Volunteers</div>
+                                    <div class="text-muted">48 recipients</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger"><i class="fas fa-envelope"></i> Email</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;">
+                                        Volunteer appreciation dinner this Friday. Please RSVP by Wednesday...
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">Pending</span>
+                                    <div class="small text-muted">15% opened</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div>Feb 16, 2025</div>
+                                    <div class="small text-muted">8:00 AM</div>
+                                </td>
+                                <td>
+                                    <div class="small">Youth Members</div>
+                                    <div class="text-muted">35 recipients</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary"><i class="fas fa-sms"></i> SMS</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;">
+                                        Youth service moved to 5 PM today. Bring friends for special guest speaker...
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Delivered</span>
+                                    <div class="small text-muted">95% success</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div>Feb 15, 2025</div>
+                                    <div class="small text-muted">6:00 PM</div>
+                                </td>
+                                <td>
+                                    <div class="small">Birthday Group</div>
+                                    <div class="text-muted">3 recipients</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary"><i class="fas fa-sms"></i> SMS</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;">
+                                        Happy Birthday! May God bless you abundantly on your special day...
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Delivered</span>
+                                    <div class="small text-muted">100% success</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div>Feb 14, 2025</div>
+                                    <div class="small text-muted">2:00 PM</div>
+                                </td>
+                                <td>
+                                    <div class="small">All Members</div>
+                                    <div class="text-muted">80 recipients</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger"><i class="fas fa-envelope"></i> Email</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;">
+                                        Valentine's couples dinner tonight at 6 PM. Last minute registrations...
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Delivered</span>
+                                    <div class="small text-muted">45% opened</div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Column: Groups & Analytics -->
+    <div class="col-lg-4 mb-4">
+        <!-- Communication Groups -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Communication Groups</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">All Members</h6>
+                                <small class="text-muted">Complete church directory</small>
+                            </div>
+                            <span class="badge bg-primary">80</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Active Members</h6>
+                                <small class="text-muted">Regular attendees</small>
+                            </div>
+                            <span class="badge bg-success">72</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Small Groups</h6>
+                                <small class="text-muted">A, B, C, D</small>
+                            </div>
+                            <span class="badge bg-info">80</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Youth Members</h6>
+                                <small class="text-muted">Ages 15-35</small>
+                            </div>
+                            <span class="badge bg-warning">35</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Volunteers</h6>
+                                <small class="text-muted">All ministry teams</small>
+                            </div>
+                            <span class="badge bg-purple">48</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Choir Members</h6>
+                                <small class="text-muted">Worship team</small>
+                            </div>
+                            <span class="badge bg-primary">15</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Ushers</h6>
+                                <small class="text-muted">Protocol team</small>
+                            </div>
+                            <span class="badge bg-success">12</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Leadership Team</h6>
+                                <small class="text-muted">Pastors & elders</small>
+                            </div>
+                            <span class="badge bg-danger">8</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Visitors</h6>
+                                <small class="text-muted">Recent first-time guests</small>
+                            </div>
+                            <span class="badge bg-secondary">12</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <button class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#manageGroupsModal">
+                        <i class="fas fa-cog me-1"></i> Manage Groups
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Communication Analytics -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Communication Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h6>Messages This Month</h6>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-primary" style="width: 70%;">SMS: 70%</div>
+                        <div class="progress-bar bg-danger" style="width: 20%;">Email: 20%</div>
+                        <div class="progress-bar bg-success" style="width: 10%;">WhatsApp: 10%</div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h6>Response Rates</h6>
+                    <div class="d-flex align-items-center mb-2">
+                        <small class="me-2" style="width: 100px;">SMS Responses:</small>
+                        <div class="progress flex-grow-1" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 85%;"></div>
+                        </div>
+                        <small class="ms-2">85%</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <small class="me-2" style="width: 100px;">Email Opens:</small>
+                        <div class="progress flex-grow-1" style="height: 10px;">
+                            <div class="progress-bar bg-info" style="width: 45%;"></div>
+                        </div>
+                        <small class="ms-2">45%</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <small class="me-2" style="width: 100px;">WhatsApp Reads:</small>
+                        <div class="progress flex-grow-1" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 92%;"></div>
+                        </div>
+                        <small class="ms-2">92%</small>
+                    </div>
+                </div>
+                
+                <div>
+                    <h6>Peak Communication Times</h6>
+                    <div class="small">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Sunday Mornings (8-10 AM)</span>
+                            <span class="text-primary">High</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Weekday Evenings (6-8 PM)</span>
+                            <span class="text-success">Medium</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Weekday Afternoons (2-4 PM)</span>
+                            <span class="text-muted">Low</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Templates -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Templates</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary text-start" onclick="loadTemplate('sunday')">
+                        <i class="fas fa-church me-2"></i>Sunday Reminder
+                    </button>
+                    <button class="btn btn-outline-success text-start" onclick="loadTemplate('midweek')">
+                        <i class="fas fa-pray me-2"></i>Midweek Service
+                    </button>
+                    <button class="btn btn-outline-info text-start" onclick="loadTemplate('bible_study')">
+                        <i class="fas fa-bible me-2"></i>Bible Study
+                    </button>
+                    <button class="btn btn-outline-warning text-start" onclick="loadTemplate('birthday')">
+                        <i class="fas fa-birthday-cake me-2"></i>Birthday Greeting
+                    </button>
+                    <button class="btn btn-outline-purple text-start" onclick="loadTemplate('event')">
+                        <i class="fas fa-calendar-alt me-2"></i>Event Announcement
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send Message Modal -->
+<div class="modal fade" id="sendMessageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Send Quick Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Send To</label>
+                        <select class="form-select" required>
+                            <option value="">Select Group</option>
+                            <option value="all">All Members</option>
+                            <option value="active">Active Members</option>
+                            <option value="youth">Youth Members</option>
+                            <option value="volunteers">Volunteers</option>
+                            <option value="custom">Custom Selection</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message Type</label>
+                        <select class="form-select" required>
+                            <option value="sms">SMS</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="email">Email</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="4" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Estimated Cost</label>
+                        <div class="alert alert-info">
+                            <div class="d-flex justify-content-between">
+                                <span>SMS Units:</span>
+                                <strong>80 units</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Total Recipients:</span>
+                                <strong>80 members</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Remaining Balance:</span>
+                                <strong class="text-success">1,250 units</strong>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Message Modal -->
+<div class="modal fade" id="scheduleMessageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Schedule Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Scheduled Date & Time</label>
+                        <input type="datetime-local" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Recipient Group</label>
+                        <select class="form-select" required>
+                            <option value="all">All Members</option>
+                            <option value="youth">Youth Members</option>
+                            <option value="volunteers">Volunteers</option>
+                            <option value="small_groups">Small Groups</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message Template</label>
+                        <select class="form-select" required>
+                            <option value="">Select Template</option>
+                            <option value="sunday_reminder">Sunday Service Reminder</option>
+                            <option value="midweek_reminder">Midweek Service Reminder</option>
+                            <option value="event_reminder">Event Reminder</option>
+                            <option value="birthday">Birthday Greeting</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="recurringSchedule">
+                        <label class="form-check-label" for="recurringSchedule">
+                            Recurring Schedule
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Schedule Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manage Groups Modal -->
+<div class="modal fade" id="manageGroupsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Communication Groups</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Group Name</th>
+                                <th>Members</th>
+                                <th>Last Updated</th>
+                                <th>Auto-Update</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>All Members</td>
+                                <td>80</td>
+                                <td>Today</td>
+                                <td><span class="badge bg-success">Yes</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Active Members</td>
+                                <td>72</td>
+                                <td>Today</td>
+                                <td><span class="badge bg-success">Yes</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Youth Members</td>
+                                <td>35</td>
+                                <td>2 days ago</td>
+                                <td><span class="badge bg-warning">Partial</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Volunteers</td>
+                                <td>48</td>
+                                <td>1 week ago</td>
+                                <td><span class="badge bg-success">Yes</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4">
+                    <h6>Create New Group</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Group Name">
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select">
+                                <option value="">Select Criteria</option>
+                                <option value="age">Age Group</option>
+                                <option value="small_group">Small Group</option>
+                                <option value="membership">Membership Status</option>
+                                <option value="volunteer">Volunteer Status</option>
+                                <option value="custom">Custom Selection</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Character counter for SMS
+const messageContent = document.getElementById('messageContent');
+const charCount = document.getElementById('charCount');
+
+function updateCharCount() {
+    const length = messageContent.value.length;
+    const smsCount = Math.ceil(length / 160);
+    const remaining = 160 - (length % 160);
+    
+    if (length <= 160) {
+        charCount.textContent = `${length} characters (1 SMS)`;
+    } else {
+        charCount.textContent = `${length} characters (${smsCount} SMS) - ${remaining} chars left in current SMS`;
+    }
+}
+
+messageContent.addEventListener('input', updateCharCount);
+updateCharCount(); // Initial call
+
+// Template loading function
+function loadTemplate(templateType) {
+    const templates = {
+        sunday: "Hello church family! This is a reminder about our Sunday service tomorrow at 10:00 AM. Come expecting God's presence and bring a friend! Blessings, Pastor Wycliffe.",
+        midweek: "Reminder: Midweek Bible study tonight at 6:00 PM. Topic: Growing in Faith. Bring your Bible and a friend!",
+        bible_study: "Bible study this Tuesday at 6:00 PM. We'll be studying Romans 8. All are welcome!",
+        birthday: "Happy Birthday! May God bless you abundantly on your special day. We thank God for your life and ministry. Blessings from your church family!",
+        event: "Special Event Announcement: Valentine's Couples Dinner this Friday at 6:00 PM. Please RSVP by Wednesday. Cost: KES 1,500 per couple."
+    };
+    
+    if (templates[templateType]) {
+        messageContent.value = templates[templateType];
+        updateCharCount();
+        
+        // Show success message
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-success alert-dismissible fade show mt-3';
+        alertDiv.innerHTML = `
+            Template loaded successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const form = document.getElementById('messageForm');
+        if (form.querySelector('.alert')) {
+            form.querySelector('.alert').remove();
+        }
+        form.insertBefore(alertDiv, form.querySelector('.mt-4'));
+    }
+}
+
+// Table filtering
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchMessages');
+    const typeFilter = document.getElementById('messageTypeFilter');
+    const tableRows = document.querySelectorAll('#messagesTable tbody tr');
+    
+    function filterMessages() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const typeValue = typeFilter.value;
+        
+        tableRows.forEach(row => {
+            const content = row.cells[3].textContent.toLowerCase();
+            const type = row.cells[2].textContent.toLowerCase();
+            
+            const matchesSearch = content.includes(searchTerm) || 
+                                 row.cells[1].textContent.toLowerCase().includes(searchTerm);
+            const matchesType = !typeValue || type.includes(typeValue);
+            
+            row.style.display = matchesSearch && matchesType ? '' : 'none';
+        });
+    }
+    
+    searchInput.addEventListener('input', filterMessages);
+    typeFilter.addEventListener('change', filterMessages);
+    
+    // Badge removal for recipient selection
+    const recipientBadges = document.querySelectorAll('.badge i.fa-times');
+    recipientBadges.forEach(icon => {
+        icon.parentElement.addEventListener('click', function() {
+            this.remove();
+        });
+    });
+    
+    // Form submission handlers
+    document.getElementById('previewBtn').addEventListener('click', function() {
+        alert('Preview feature would show message preview here');
+    });
+    
+    document.getElementById('sendBtn').addEventListener('click', function() {
+        const recipients = document.querySelectorAll('.badge').length;
+        if (confirm(`Send message to ${recipients} recipients?`)) {
+            alert('Message sent successfully!');
+        }
+    });
+    
+    document.getElementById('saveDraftBtn').addEventListener('click', function() {
+        alert('Draft saved successfully!');
+    });
+    
+    // Template selector
+    document.getElementById('templateSelect').addEventListener('change', function() {
+        if (this.value && this.value !== 'custom') {
+            loadTemplate(this.value);
+        }
+    });
+});
+</script>
+
+<style>
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+    cursor: pointer;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.bg-teal {
+    background-color: #20c997 !important;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.btn-outline-purple {
+    color: #6f42c1;
+    border-color: #6f42c1;
+}
+
+.btn-outline-purple:hover {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.btn-outline-teal {
+    color: #20c997;
+    border-color: #20c997;
+}
+
+.btn-outline-teal:hover {
+    background-color: #20c997;
+    color: white;
+}
+
+.avatar-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8em;
+    margin-right: 5px;
+}
+</style>
+{% endblock %}

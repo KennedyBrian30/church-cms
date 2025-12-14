@@ -1,0 +1,1155 @@
+{% extends "base.html" %}
+{% block title %}Reports & Analytics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Reports & Analytics</h1>
+    <div>
+        <button class="btn btn-primary" onclick="generateReport('comprehensive')">
+            <i class="fas fa-file-pdf"></i> Generate Report
+        </button>
+        <button class="btn btn-outline-secondary" onclick="exportData()">
+            <i class="fas fa-download"></i> Export Data
+        </button>
+    </div>
+</div>
+
+<!-- Report Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Report Type</label>
+                <select class="form-select" id="reportType">
+                    <option value="comprehensive">Comprehensive Report</option>
+                    <option value="financial">Financial Report</option>
+                    <option value="attendance">Attendance Report</option>
+                    <option value="membership">Membership Report</option>
+                    <option value="children">Children's Ministry</option>
+                    <option value="volunteer">Volunteer Report</option>
+                    <option value="events">Events Report</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Period</label>
+                <select class="form-select" id="reportPeriod">
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly" selected>Quarterly (Q1 2025)</option>
+                    <option value="yearly">Yearly (2025)</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">From Date</label>
+                <input type="date" class="form-control" id="fromDate" value="2025-01-01">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">To Date</label>
+                <input type="date" class="form-control" id="toDate" value="2025-03-31">
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" onclick="loadReportData()">
+                    <i class="fas fa-sync-alt"></i> Generate Report
+                </button>
+                <button class="btn btn-outline-secondary ms-2" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i> Reset Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Executive Summary -->
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Executive Summary - Q1 2025 (Jan-Mar)</h5>
+                <span class="badge bg-success">Generated: Feb 23, 2025</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-4">
+                        <div class="display-4 text-primary">80</div>
+                        <div class="text-muted">Total Members</div>
+                        <small class="text-success">+8% growth from Q4 2024</small>
+                    </div>
+                    <div class="col-md-3 text-center mb-4">
+                        <div class="display-4 text-success">KES 850K</div>
+                        <div class="text-muted">Total Income</div>
+                        <small class="text-success">+12% from Q4 2024</small>
+                    </div>
+                    <div class="col-md-3 text-center mb-4">
+                        <div class="display-4 text-info">83%</div>
+                        <div class="text-muted">Average Attendance</div>
+                        <small class="text-warning">-2% from Q4 2024</small>
+                    </div>
+                    <div class="col-md-3 text-center mb-4">
+                        <div class="display-4 text-warning">48</div>
+                        <div class="text-muted">Active Volunteers</div>
+                        <small class="text-success">+15% from Q4 2024</small>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-chart-line me-2"></i>
+                    <strong>Key Insights:</strong> Church showing strong growth in membership and finances, with slight dip in attendance. Volunteer engagement at record high.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Reports -->
+<div class="row">
+    <!-- Financial Report -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Financial Report Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Category</th>
+                                <th class="text-end">Budget (KES)</th>
+                                <th class="text-end">Actual (KES)</th>
+                                <th class="text-end">Variance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tithes</td>
+                                <td class="text-end">450,000</td>
+                                <td class="text-end">450,000</td>
+                                <td class="text-end text-success">0%</td>
+                                <td><span class="badge bg-success">On Target</span></td>
+                            </tr>
+                            <tr>
+                                <td>Offerings</td>
+                                <td class="text-end">180,000</td>
+                                <td class="text-end">180,000</td>
+                                <td class="text-end text-success">0%</td>
+                                <td><span class="badge bg-success">On Target</span></td>
+                            </tr>
+                            <tr>
+                                <td>Development Fund</td>
+                                <td class="text-end">120,000</td>
+                                <td class="text-end">120,000</td>
+                                <td class="text-end text-success">0%</td>
+                                <td><span class="badge bg-success">On Target</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Income</strong></td>
+                                <td class="text-end"><strong>750,000</strong></td>
+                                <td class="text-end"><strong>850,000</strong></td>
+                                <td class="text-end text-success"><strong>+13.3%</strong></td>
+                                <td><span class="badge bg-success">Exceeding</span></td>
+                            </tr>
+                            <tr class="table-light">
+                                <td>Staff Salaries</td>
+                                <td class="text-end">150,000</td>
+                                <td class="text-end">150,000</td>
+                                <td class="text-end text-success">0%</td>
+                                <td><span class="badge bg-success">On Target</span></td>
+                            </tr>
+                            <tr>
+                                <td>Utilities</td>
+                                <td class="text-end">60,000</td>
+                                <td class="text-end">51,600</td>
+                                <td class="text-end text-success">-14%</td>
+                                <td><span class="badge bg-success">Under Budget</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ministry Expenses</td>
+                                <td class="text-end">100,000</td>
+                                <td class="text-end">85,000</td>
+                                <td class="text-end text-success">-15%</td>
+                                <td><span class="badge bg-success">Under Budget</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total Expenses</strong></td>
+                                <td class="text-end"><strong>620,000</strong></td>
+                                <td class="text-end"><strong>620,000</strong></td>
+                                <td class="text-end text-success"><strong>0%</strong></td>
+                                <td><span class="badge bg-success">On Budget</span></td>
+                            </tr>
+                            <tr class="table-success">
+                                <td><strong>Net Surplus</strong></td>
+                                <td class="text-end"><strong>130,000</strong></td>
+                                <td class="text-end"><strong>230,000</strong></td>
+                                <td class="text-end text-success"><strong>+76.9%</strong></td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-3">
+                    <canvas id="financialTrendChart" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership & Attendance -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Membership & Attendance Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Membership Growth</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="me-2" style="width: 100px;">Q4 2024:</small>
+                            <div class="progress flex-grow-1" style="height: 15px;">
+                                <div class="progress-bar bg-primary" style="width: 74%;">74</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <small class="me-2" style="width: 100px;">Q1 2025:</small>
+                            <div class="progress flex-grow-1" style="height: 15px;">
+                                <div class="progress-bar bg-success" style="width: 80%;">80</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Attendance Trends</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="me-2" style="width: 100px;">January:</small>
+                            <div class="progress flex-grow-1" style="height: 15px;">
+                                <div class="progress-bar bg-info" style="width: 85%;">85%</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <small class="me-2" style="width: 100px;">February:</small>
+                            <div class="progress flex-grow-1" style="height: 15px;">
+                                <div class="progress-bar bg-info" style="width: 83%;">83%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Service Type</th>
+                                <th class="text-center">Avg. Attendance</th>
+                                <th class="text-center">Growth</th>
+                                <th class="text-center">Peak Attendance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sunday Main Service</td>
+                                <td class="text-center">65</td>
+                                <td class="text-center text-success">+8%</td>
+                                <td class="text-center">72 (Feb 2)</td>
+                            </tr>
+                            <tr>
+                                <td>Youth Service</td>
+                                <td class="text-center">35</td>
+                                <td class="text-center text-success">+12%</td>
+                                <td class="text-center">42 (Jan 25)</td>
+                            </tr>
+                            <tr>
+                                <td>Midweek Bible Study</td>
+                                <td class="text-center">20</td>
+                                <td class="text-center text-warning">-5%</td>
+                                <td class="text-center">25 (Jan 15)</td>
+                            </tr>
+                            <tr>
+                                <td>Children's Ministry</td>
+                                <td class="text-center">42</td>
+                                <td class="text-center text-success">+15%</td>
+                                <td class="text-center">48 (Feb 9)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-3">
+                    <canvas id="attendanceChart" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Demographics & Ministry Reports -->
+<div class="row">
+    <!-- Demographic Analysis -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Demographic Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Age Distribution</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td>0-14 Years</td>
+                                        <td class="text-end">15</td>
+                                        <td class="text-end">19%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15-21 Years</td>
+                                        <td class="text-end">20</td>
+                                        <td class="text-end">25%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>22-35 Years</td>
+                                        <td class="text-end">30</td>
+                                        <td class="text-end">38%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>36+ Years</td>
+                                        <td class="text-end">15</td>
+                                        <td class="text-end">18%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Community Distribution</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td>Luhya</td>
+                                        <td class="text-end">32</td>
+                                        <td class="text-end">40%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Luo</td>
+                                        <td class="text-end">18</td>
+                                        <td class="text-end">23%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kikuyu</td>
+                                        <td class="text-end">15</td>
+                                        <td class="text-end">19%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kalenjin</td>
+                                        <td class="text-end">10</td>
+                                        <td class="text-end">12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Teso</td>
+                                        <td class="text-end">5</td>
+                                        <td class="text-end">6%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h6>New Members Analysis</h6>
+                    <div class="alert alert-success">
+                        <i class="fas fa-user-plus me-2"></i>
+                        <strong>12 new members</strong> joined in Q1 2025
+                        <div class="small mt-1">Primary sources: Visitor follow-up (6), Member referrals (4), Community outreach (2)</div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h6>Member Engagement</h6>
+                    <div class="d-flex align-items-center mb-2">
+                        <small class="me-2" style="width: 120px;">Active Members:</small>
+                        <div class="progress flex-grow-1" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 90%;"></div>
+                        </div>
+                        <small class="ms-2">90% (72/80)</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <small class="me-2" style="width: 120px;">Regular Givers:</small>
+                        <div class="progress flex-grow-1" style="height: 10px;">
+                            <div class="progress-bar bg-info" style="width: 75%;"></div>
+                        </div>
+                        <small class="ms-2">75% (60/80)</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <small class="me-2" style="width: 120px;">Volunteers:</small>
+                        <div class="progress flex-grow-1" style="height: 10px;">
+                            <div class="progress-bar bg-warning" style="width: 60%;"></div>
+                        </div>
+                        <small class="ms-2">60% (48/80)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ministry Performance -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Ministry Performance</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ministry</th>
+                                <th class="text-center">Participants</th>
+                                <th class="text-center">Volunteers</th>
+                                <th class="text-center">Events</th>
+                                <th class="text-center">Growth</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Children's Ministry</td>
+                                <td class="text-center">58</td>
+                                <td class="text-center">15</td>
+                                <td class="text-center">40</td>
+                                <td class="text-center text-success">+15%</td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                            <tr>
+                                <td>Youth Ministry</td>
+                                <td class="text-center">35</td>
+                                <td class="text-center">6</td>
+                                <td class="text-center">12</td>
+                                <td class="text-center text-success">+12%</td>
+                                <td><span class="badge bg-success">Good</span></td>
+                            </tr>
+                            <tr>
+                                <td>Worship Ministry</td>
+                                <td class="text-center">15</td>
+                                <td class="text-center">15</td>
+                                <td class="text-center">48</td>
+                                <td class="text-center text-warning">+5%</td>
+                                <td><span class="badge bg-warning">Stable</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ushering Ministry</td>
+                                <td class="text-center">12</td>
+                                <td class="text-center">12</td>
+                                <td class="text-center">48</td>
+                                <td class="text-center text-success">+8%</td>
+                                <td><span class="badge bg-success">Good</span></td>
+                            </tr>
+                            <tr>
+                                <td>Hospitality Ministry</td>
+                                <td class="text-center">10</td>
+                                <td class="text-center">10</td>
+                                <td class="text-center">8</td>
+                                <td class="text-center text-danger">-10%</td>
+                                <td><span class="badge bg-danger">Needs Attention</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4">
+                    <h6>Volunteer Engagement</h6>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="h4 text-primary mb-1">420</div>
+                            <small class="text-muted">Hours This Month</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="h4 text-success mb-1">48</div>
+                            <small class="text-muted">Active Volunteers</small>
+                        </div>
+                        <div class="col-4">
+                            <div class="h4 text-warning mb-1">18</div>
+                            <small class="text-muted">Open Positions</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>Top Performing Ministries</h6>
+                    <ol class="mb-0">
+                        <li>Children's Ministry (+15% growth, 58 participants)</li>
+                        <li>Youth Ministry (+12% growth, 35 participants)</li>
+                        <li>Ushering Ministry (+8% growth, 100% volunteer rate)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Events & Communication Reports -->
+<div class="row">
+    <!-- Events Report -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Events & Programs Report</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Event</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Attendance</th>
+                                <th class="text-center">Budget (KES)</th>
+                                <th class="text-center">Actual (KES)</th>
+                                <th>Success Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>New Year Service</td>
+                                <td class="text-center">Jan 1</td>
+                                <td class="text-center">75</td>
+                                <td class="text-center">20,000</td>
+                                <td class="text-center">18,500</td>
+                                <td><span class="badge bg-success">95%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Youth Camp</td>
+                                <td class="text-center">Jan 15-17</td>
+                                <td class="text-center">42</td>
+                                <td class="text-center">150,000</td>
+                                <td class="text-center">145,000</td>
+                                <td><span class="badge bg-success">97%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Valentine's Dinner</td>
+                                <td class="text-center">Feb 14</td>
+                                <td class="text-center">40</td>
+                                <td class="text-center">60,000</td>
+                                <td class="text-center">55,000</td>
+                                <td><span class="badge bg-success">92%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Baby Dedication</td>
+                                <td class="text-center">Feb 16</td>
+                                <td class="text-center">68</td>
+                                <td class="text-center">15,000</td>
+                                <td class="text-center">12,000</td>
+                                <td><span class="badge bg-success">100%</span></td>
+                            </tr>
+                            <tr class="table-light">
+                                <td><strong>Total/Average</strong></td>
+                                <td class="text-center"><strong>-</strong></td>
+                                <td class="text-center"><strong>56 avg</strong></td>
+                                <td class="text-center"><strong>245,000</strong></td>
+                                <td class="text-center"><strong>230,500</strong></td>
+                                <td><span class="badge bg-success"><strong>96% avg</strong></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>Event Success Metrics</h6>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="h5 text-primary mb-1">22</div>
+                            <small class="text-muted">Events This Quarter</small>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="h5 text-success mb-1">96%</div>
+                            <small class="text-muted">Average Success Rate</small>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="h5 text-info mb-1">56</div>
+                            <small class="text-muted">Avg. Attendance</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>Upcoming Major Events</h6>
+                    <ul class="mb-0">
+                        <li>Easter Celebration (Apr 20) - Expected: 100+ attendees</li>
+                        <li>Women's Conference (May 15-17) - Budget: KES 200,000</li>
+                        <li>Annual General Meeting (Jun 30) - All members invited</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Communication Report -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Communication & Engagement Report</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Message Statistics</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td>Total Messages Sent</td>
+                                        <td class="text-end">245</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SMS Messages</td>
+                                        <td class="text-end">172 (70%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Messages</td>
+                                        <td class="text-end">49 (20%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>WhatsApp Messages</td>
+                                        <td class="text-end">24 (10%)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Response Rates</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td>SMS Response Rate</td>
+                                        <td class="text-end text-success">85%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Open Rate</td>
+                                        <td class="text-end text-warning">45%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>WhatsApp Read Rate</td>
+                                        <td class="text-end text-success">92%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Overall Engagement</td>
+                                        <td class="text-end text-success">68%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h6>Communication Cost Analysis</h6>
+                    <div class="alert alert-info">
+                        <i class="fas fa-money-bill-wave me-2"></i>
+                        <strong>SMS Balance:</strong> 1,250 units remaining
+                        <div class="small mt-1">Average cost per message: KES 1.20 • Monthly budget: KES 3,000</div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h6>Most Effective Communication Types</h6>
+                    <div class="d-flex align-items-center mb-2">
+                        <small class="me-2" style="width: 100px;">WhatsApp:</small>
+                        <div class="progress flex-grow-1" style="height: 15px;">
+                            <div class="progress-bar bg-success" style="width: 92%;"></div>
+                        </div>
+                        <small class="ms-2">92% effective</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <small class="me-2" style="width: 100px;">SMS:</small>
+                        <div class="progress flex-grow-1" style="height: 15px;">
+                            <div class="progress-bar bg-primary" style="width: 85%;"></div>
+                        </div>
+                        <small class="ms-2">85% effective</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <small class="me-2" style="width: 100px;">Email:</small>
+                        <div class="progress flex-grow-1" style="height: 15px;">
+                            <div class="progress-bar bg-warning" style="width: 45%;"></div>
+                        </div>
+                        <small class="ms-2">45% effective</small>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>Recommendations</h6>
+                    <ul class="small mb-0">
+                        <li>Increase use of WhatsApp for important announcements</li>
+                        <li>Improve email subject lines to increase open rates</li>
+                        <li>Schedule messages for peak engagement times (Sunday mornings)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendations & Action Items -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Strategic Recommendations & Action Items</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card border-success mb-3">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">Strengths & Opportunities</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="mb-0">
+                                    <li><strong>Financial Health:</strong> Strong surplus of KES 230,000 (76.9% above budget)</li>
+                                    <li><strong>Membership Growth:</strong> 8% increase in active members</li>
+                                    <li><strong>Children's Ministry:</strong> 15% growth - largest growing ministry</li>
+                                    <li><strong>Volunteer Engagement:</strong> 60% of members actively volunteering</li>
+                                    <li><strong>Event Success:</strong> 96% average success rate for events</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card border-warning mb-3">
+                            <div class="card-header bg-warning text-white">
+                                <h6 class="mb-0">Areas for Improvement</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="mb-0">
+                                    <li><strong>Attendance:</strong> Slight 2% decrease from previous quarter</li>
+                                    <li><strong>Midweek Services:</strong> 5% decline in Bible study attendance</li>
+                                    <li><strong>Hospitality Ministry:</strong> 10% decrease in participation</li>
+                                    <li><strong>Email Engagement:</strong> Low 45% open rate for email communications</li>
+                                    <li><strong>Volunteer Needs:</strong> 18 open positions across ministries</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h6>Immediate Action Items (Next 30 Days)</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Priority</th>
+                                    <th>Action Item</th>
+                                    <th>Responsible</th>
+                                    <th>Timeline</th>
+                                    <th>Expected Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-danger">High</span></td>
+                                    <td>Recruit volunteers for Hospitality Ministry</td>
+                                    <td>Jane Chepkoech</td>
+                                    <td>Mar 15, 2025</td>
+                                    <td>Improve visitor experience</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning">Medium</span></td>
+                                    <td>Revamp midweek Bible study format</td>
+                                    <td>Benjamin Wanyonyi</td>
+                                    <td>Mar 30, 2025</td>
+                                    <td>Increase attendance by 15%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning">Medium</span></td>
+                                    <td>Improve email communication strategy</td>
+                                    <td>Naomi Wangila</td>
+                                    <td>Apr 10, 2025</td>
+                                    <td>Increase open rates to 60%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-info">Low</span></td>
+                                    <td>Plan Easter outreach campaign</td>
+                                    <td>Peter Apaa</td>
+                                    <td>Apr 15, 2025</td>
+                                    <td>Attract 20+ new visitors</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="alert alert-primary mt-4">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Strategic Insight:</strong> The church is in a strong financial and growth position. Focus should shift to improving engagement metrics and addressing volunteer shortages while maintaining current growth momentum.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Generation Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Report Format</label>
+                    <select class="form-select">
+                        <option value="pdf">PDF Document</option>
+                        <option value="excel">Excel Spreadsheet</option>
+                        <option value="word">Word Document</option>
+                        <option value="html">Web Page</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Include Sections</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="includeExecutive" checked>
+                        <label class="form-check-label" for="includeExecutive">
+                            Executive Summary
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="includeFinancial" checked>
+                        <label class="form-check-label" for="includeFinancial">
+                            Financial Report
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="includeAttendance" checked>
+                        <label class="form-check-label" for="includeAttendance">
+                            Attendance Analysis
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="includeDemographics" checked>
+                        <label class="form-check-label" for="includeDemographics">
+                            Demographic Analysis
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="includeRecommendations" checked>
+                        <label class="form-check-label" for="includeRecommendations">
+                            Recommendations
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Report Password (Optional)</label>
+                    <input type="password" class="form-control" placeholder="Enter password to protect report">
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Report generation may take a few moments. You will be notified when it's ready for download.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Generate Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Financial Trend Chart
+new Chart(document.getElementById('financialTrendChart'), {
+    type: 'line',
+    data: {
+        labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+        datasets: [
+            {
+                label: 'Income (KES)',
+                data: [720000, 680000, 750000, 850000, 110200, 0],
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                tension: 0.3,
+                fill: true,
+                borderWidth: 2
+            },
+            {
+                label: 'Expenses (KES)',
+                data: [620000, 600000, 650000, 620000, 77000, 0],
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                tension: 0.3,
+                fill: true,
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return 'KES ' + (value/1000).toFixed(0) + 'K';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Attendance Chart
+new Chart(document.getElementById('attendanceChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Sun Main', 'Youth', 'Bible Study', 'Children'],
+        datasets: [
+            {
+                label: 'Q4 2024',
+                data: [60, 31, 21, 36],
+                backgroundColor: 'rgba(108, 117, 125, 0.7)',
+                borderColor: '#6c757d',
+                borderWidth: 1
+            },
+            {
+                label: 'Q1 2025',
+                data: [65, 35, 20, 42],
+                backgroundColor: 'rgba(23, 162, 184, 0.7)',
+                borderColor: '#17a2b8',
+                borderWidth: 1
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Average Attendance'
+                }
+            }
+        }
+    }
+});
+
+// Report Functions
+function generateReport(type) {
+    const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+    modal.show();
+}
+
+function exportData() {
+    const format = prompt('Select export format: CSV, Excel, or PDF', 'Excel');
+    if (format) {
+        alert(`Exporting data as ${format} format... This may take a moment.`);
+        // In a real app, this would trigger a download
+        setTimeout(() => {
+            alert('Data exported successfully! Check your downloads folder.');
+        }, 1500);
+    }
+}
+
+function loadReportData() {
+    const reportType = document.getElementById('reportType').value;
+    const period = document.getElementById('reportPeriod').value;
+    const fromDate = document.getElementById('fromDate').value;
+    const toDate = document.getElementById('toDate').value;
+    
+    // Show loading state
+    const generateBtn = document.querySelector('.btn-primary');
+    const originalText = generateBtn.innerHTML;
+    generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    generateBtn.disabled = true;
+    
+    // Simulate API call
+    setTimeout(() => {
+        alert(`Loading ${reportType} report for ${period} (${fromDate} to ${toDate})`);
+        generateBtn.innerHTML = originalText;
+        generateBtn.disabled = false;
+        
+        // Update executive summary based on period
+        const summaryTitle = document.querySelector('.card-header h5');
+        if (period === 'monthly') {
+            summaryTitle.textContent = 'Executive Summary - February 2025';
+        } else if (period === 'quarterly') {
+            summaryTitle.textContent = 'Executive Summary - Q1 2025 (Jan-Mar)';
+        } else if (period === 'yearly') {
+            summaryTitle.textContent = 'Executive Summary - 2025';
+        }
+        
+        // Update generated date
+        document.querySelector('.badge.bg-success').textContent = 'Generated: ' + new Date().toLocaleDateString();
+        
+    }, 1000);
+}
+
+function resetFilters() {
+    document.getElementById('reportType').value = 'comprehensive';
+    document.getElementById('reportPeriod').value = 'quarterly';
+    document.getElementById('fromDate').value = '2025-01-01';
+    document.getElementById('toDate').value = '2025-03-31';
+    loadReportData();
+}
+
+// Initialize date fields for custom range
+document.getElementById('reportPeriod').addEventListener('change', function() {
+    const fromDate = document.getElementById('fromDate');
+    const toDate = document.getElementById('toDate');
+    
+    if (this.value === 'monthly') {
+        fromDate.value = '2025-02-01';
+        toDate.value = '2025-02-28';
+    } else if (this.value === 'quarterly') {
+        fromDate.value = '2025-01-01';
+        toDate.value = '2025-03-31';
+    } else if (this.value === 'yearly') {
+        fromDate.value = '2025-01-01';
+        toDate.value = '2025-12-31';
+    } else if (this.value === 'custom') {
+        fromDate.disabled = false;
+        toDate.disabled = false;
+        return;
+    }
+    
+    fromDate.disabled = true;
+    toDate.disabled = true;
+});
+
+// Initialize with quarterly data
+document.addEventListener('DOMContentLoaded', function() {
+    loadReportData();
+});
+
+// Print functionality
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault();
+        window.print();
+    }
+});
+
+// Add print button functionality
+document.querySelector('.btn-outline-secondary').addEventListener('click', function() {
+    window.print();
+});
+</script>
+
+<style>
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.text-end {
+    text-align: right;
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.display-4 {
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #dee2e6;
+}
+
+.table-sm td,
+.table-sm th {
+    padding: 0.3rem;
+}
+
+.alert {
+    border-radius: 10px;
+}
+
+.border-success {
+    border-color: #28a745 !important;
+}
+
+.border-warning {
+    border-color: #ffc107 !important;
+}
+
+.bg-success.text-white {
+    background-color: #28a745 !important;
+}
+
+.bg-warning.text-white {
+    background-color: #ffc107 !important;
+}
+
+/* Print styles */
+@media print {
+    .btn, .card-header .badge, #reportModal {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+    
+    table {
+        page-break-inside: avoid;
+    }
+}
+</style>
+{% endblock %}

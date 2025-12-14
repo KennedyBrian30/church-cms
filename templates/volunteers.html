@@ -1,0 +1,1205 @@
+{% extends "base.html" %}
+{% block title %}Volunteer Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Volunteer Management</h1>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVolunteerModal">
+            <i class="fas fa-user-plus"></i> Add Volunteer
+        </button>
+        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#assignTaskModal">
+            <i class="fas fa-tasks"></i> Assign Task
+        </button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">Active Volunteers</h5>
+                <h2 class="mb-0">48</h2>
+                <small>12 new this month</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h5 class="card-title">Hours This Month</h5>
+                <h2 class="mb-0">420</h2>
+                <small>Avg 8.75 hrs/volunteer</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <h5 class="card-title">Open Positions</h5>
+                <h2 class="mb-0">18</h2>
+                <small>Urgent: 6 positions</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title">Training Required</h5>
+                <h2 class="mb-0">12</h2>
+                <small>New volunteers</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts and Overview -->
+<div class="row">
+    <!-- Volunteer Distribution -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Volunteer Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="volunteerDistributionChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Overview -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Department Overview</h5>
+                <select class="form-select form-select-sm" style="width: auto;" id="departmentFilter">
+                    <option value="">All Departments</option>
+                    <option value="worship">Worship</option>
+                    <option value="ushering">Ushering</option>
+                    <option value="children">Children's Ministry</option>
+                    <option value="youth">Youth Ministry</option>
+                    <option value="technical">Technical</option>
+                    <option value="hospitality">Hospitality</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Department</th>
+                                <th class="text-center">Total Volunteers</th>
+                                <th class="text-center">Team Leader</th>
+                                <th class="text-center">Current Needs</th>
+                                <th class="text-center">Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-primary text-white me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-music"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Worship & Choir</strong>
+                                            <div class="small text-muted">Sunday services & practices</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="mb-0">15</h5>
+                                    <small class="text-muted">2 teams</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small">Alice Akinyi</div>
+                                    <small class="text-muted">Lead Vocalist</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger">3 positions</span>
+                                    <div class="small text-muted">Sound engineer, backup vocalists</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-success text-white me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-hands-helping"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Ushering & Protocol</strong>
+                                            <div class="small text-muted">Welcome, seating, offerings</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="mb-0">12</h5>
+                                    <small class="text-muted">3 teams</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small">Kennedy Omondi</div>
+                                    <small class="text-muted">Head Usher</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-warning">2 positions</span>
+                                    <div class="small text-muted">First-time guests team</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-info text-white me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-child"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Children's Ministry</strong>
+                                            <div class="small text-muted">Sunday school & childcare</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="mb-0">8</h5>
+                                    <small class="text-muted">2 age groups</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small">Naomi Wangila</div>
+                                    <small class="text-muted">Children's Coordinator</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger">4 positions</span>
+                                    <div class="small text-muted">Nursery assistants, teachers</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-warning">Needs Help</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-warning text-white me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Youth Ministry</strong>
+                                            <div class="small text-muted">Youth services & activities</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="mb-0">6</h5>
+                                    <small class="text-muted">Peer leaders</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small">Peter Apaa</div>
+                                    <small class="text-muted">Youth Leader</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-success">Full</span>
+                                    <div class="small text-muted">No current openings</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-danger text-white me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-sliders-h"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Technical Team</strong>
+                                            <div class="small text-muted">Sound, lighting, projection</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="mb-0">5</h5>
+                                    <small class="text-muted">Specialized roles</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small">Richard Rono</div>
+                                    <small class="text-muted">Technical Director</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger">3 positions</span>
+                                    <div class="small text-muted">Live stream operator, camera</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-warning">Critical Need</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-purple text-white me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-utensils"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Hospitality & Events</strong>
+                                            <div class="small text-muted">Food, setup, cleanup</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <h5 class="mb-0">10</h5>
+                                    <small class="text-muted">Event-based teams</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="small">Jane Chepkoech</div>
+                                    <small class="text-muted">Hospitality Lead</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-warning">6 positions</span>
+                                    <div class="small text-muted">Valentine's dinner team</div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-info">Event Planning</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Volunteers Table -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">All Volunteers</h5>
+        <div class="d-flex gap-2">
+            <input type="text" class="form-control form-control-sm" placeholder="Search volunteers..." id="searchVolunteers">
+            <select class="form-select form-select-sm" style="width: auto;" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="training">In Training</option>
+            </select>
+            <select class="form-select form-select-sm" style="width: auto;" id="departmentSelect">
+                <option value="">All Departments</option>
+                <option value="worship">Worship</option>
+                <option value="ushering">Ushering</option>
+                <option value="children">Children</option>
+                <option value="youth">Youth</option>
+                <option value="technical">Technical</option>
+                <option value="hospitality">Hospitality</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="volunteersTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Volunteer</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Contact</th>
+                        <th class="text-center">Hours This Month</th>
+                        <th>Skills</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Worship Team -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    AA
+                                </div>
+                                <div>
+                                    <strong>Alice Akinyi</strong>
+                                    <div class="small text-muted">Team Leader</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Worship & Choir</span></td>
+                        <td>Lead Vocalist</td>
+                        <td>
+                            <div>0717 890 123</div>
+                            <div class="small text-muted">aakinyi@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">25</h5>
+                            <div class="small text-muted">2 practices, 4 services</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Singing</span>
+                            <span class="badge bg-light text-dark border">Piano</span>
+                            <span class="badge bg-light text-dark border">Leadership</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    DO
+                                </div>
+                                <div>
+                                    <strong>David Ochieng</strong>
+                                    <div class="small text-muted">Pianist</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Worship & Choir</span></td>
+                        <td>Keyboardist</td>
+                        <td>
+                            <div>0723 456 789</div>
+                            <div class="small text-muted">dochieng@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">20</h5>
+                            <div class="small text-muted">Regular service</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Piano</span>
+                            <span class="badge bg-light text-dark border">Music Theory</span>
+                            <span class="badge bg-light text-dark border">Arrangement</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Ushering Team -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-success text-white me-3">
+                                    KO
+                                </div>
+                                <div>
+                                    <strong>Kennedy Omondi</strong>
+                                    <div class="small text-muted">Head Usher</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-success">Ushering & Protocol</span></td>
+                        <td>Team Leader</td>
+                        <td>
+                            <div>0716 789 012</div>
+                            <div class="small text-muted">komondi@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">15</h5>
+                            <div class="small text-muted">All Sunday services</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Leadership</span>
+                            <span class="badge bg-light text-dark border">Communication</span>
+                            <span class="badge bg-light text-dark border">First Aid</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-success text-white me-3">
+                                    GA
+                                </div>
+                                <div>
+                                    <strong>Grace Akinyi</strong>
+                                    <div class="small text-muted">Greeting Team</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-success">Ushering & Protocol</span></td>
+                        <td>Greeter</td>
+                        <td>
+                            <div>0728 901 234</div>
+                            <div class="small text-muted">gakinyi@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">12</h5>
+                            <div class="small text-muted">Morning services</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Hospitality</span>
+                            <span class="badge bg-light text-dark border">Customer Service</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Children's Ministry -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-info text-white me-3">
+                                    NW
+                                </div>
+                                <div>
+                                    <strong>Naomi Wangila</strong>
+                                    <div class="small text-muted">Coordinator</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info">Children's Ministry</span></td>
+                        <td>Coordinator</td>
+                        <td>
+                            <div>0713 456 789</div>
+                            <div class="small text-muted">nwangila@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">30</h5>
+                            <div class="small text-muted">Sunday school + prep</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Childcare</span>
+                            <span class="badge bg-light text-dark border">Teaching</span>
+                            <span class="badge bg-light text-dark border">Curriculum</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-info text-white me-3">
+                                    SW
+                                </div>
+                                <div>
+                                    <strong>Sharon Wekesa</strong>
+                                    <div class="small text-muted">Sunday School Teacher</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info">Children's Ministry</span></td>
+                        <td>Teacher (Ages 6-9)</td>
+                        <td>
+                            <div>0715 678 901</div>
+                            <div class="small text-muted">swekesa@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">18</h5>
+                            <div class="small text-muted">Weekly classes</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Teaching</span>
+                            <span class="badge bg-light text-dark border">Creative Arts</span>
+                            <span class="badge bg-light text-dark border">Storytelling</span>
+                        </td>
+                        <td><span class="badge bg-warning">In Training</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Youth Ministry -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-warning text-white me-3">
+                                    PA
+                                </div>
+                                <div>
+                                    <strong>Peter Apaa</strong>
+                                    <div class="small text-muted">Youth Leader</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-warning">Youth Ministry</span></td>
+                        <td>Youth Leader</td>
+                        <td>
+                            <div>0719 012 345</div>
+                            <div class="small text-muted">papaa@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">35</h5>
+                            <div class="small text-muted">Services + activities</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Mentoring</span>
+                            <span class="badge bg-light text-dark border">Sports</span>
+                            <span class="badge bg-light text-dark border">Tech</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Technical Team -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    RR
+                                </div>
+                                <div>
+                                    <strong>Richard Rono</strong>
+                                    <div class="small text-muted">Technical Director</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-danger">Technical Team</span></td>
+                        <td>Sound Engineer</td>
+                        <td>
+                            <div>0726 789 012</div>
+                            <div class="small text-muted">rrono@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">25</h5>
+                            <div class="small text-muted">All services + setup</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Sound Engineering</span>
+                            <span class="badge bg-light text-dark border">Live Streaming</span>
+                            <span class="badge bg-light text-dark border">Equipment</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Hospitality -->
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-purple text-white me-3">
+                                    JC
+                                </div>
+                                <div>
+                                    <strong>Jane Chepkoech</strong>
+                                    <div class="small text-muted">Hospitality Lead</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-purple">Hospitality & Events</span></td>
+                        <td>Team Leader</td>
+                        <td>
+                            <div>0725 678 901</div>
+                            <div class="small text-muted">jchepkoech@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">20</h5>
+                            <div class="small text-muted">Events + weekly</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Cooking</span>
+                            <span class="badge bg-light text-dark border">Event Planning</span>
+                            <span class="badge bg-light text-dark border">Organization</span>
+                        </td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-purple text-white me-3">
+                                    MO
+                                </div>
+                                <div>
+                                    <strong>Mary Okiror</strong>
+                                    <div class="small text-muted">Event Coordinator</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-purple">Hospitality & Events</span></td>
+                        <td>Event Coordinator</td>
+                        <td>
+                            <div>0720 123 456</div>
+                            <div class="small text-muted">mokiror@email.com</div>
+                        </td>
+                        <td class="text-center">
+                            <h5 class="mb-0">15</h5>
+                            <div class="small text-muted">Special events</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">Decorations</span>
+                            <span class="badge bg-light text-dark border">Logistics</span>
+                            <span class="badge bg-light text-dark border">Budgeting</span>
+                        </td>
+                        <td><span class="badge bg-info">Part-time</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Upcoming Volunteer Schedule -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Upcoming Volunteer Schedule (Next 7 Days)</h5>
+                <button class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-calendar-alt"></i> View Full Schedule
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Event/Service</th>
+                                <th>Department</th>
+                                <th>Scheduled Volunteers</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Feb 21, 2025</td>
+                                <td>Choir Practice</td>
+                                <td><span class="badge bg-primary">Worship</span></td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-primary text-white" style="width: 30px; height: 30px; font-size: 0.8em;">AA</span>
+                                        <span class="avatar-circle bg-primary text-white" style="width: 30px; height: 30px; font-size: 0.8em;">DO</span>
+                                        <span class="avatar-circle bg-primary text-white" style="width: 30px; height: 30px; font-size: 0.8em;">+8</span>
+                                    </div>
+                                </td>
+                                <td>5:00 PM - 7:00 PM</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Feb 23, 2025</td>
+                                <td>Sunday Main Service</td>
+                                <td><span class="badge bg-success">Ushering</span></td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-success text-white" style="width: 30px; height: 30px; font-size: 0.8em;">KO</span>
+                                        <span class="avatar-circle bg-success text-white" style="width: 30px; height: 30px; font-size: 0.8em;">GA</span>
+                                        <span class="avatar-circle bg-success text-white" style="width: 30px; height: 30px; font-size: 0.8em;">+4</span>
+                                    </div>
+                                </td>
+                                <td>9:00 AM - 12:00 PM</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Feb 23, 2025</td>
+                                <td>Sunday School</td>
+                                <td><span class="badge bg-info">Children</span></td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-info text-white" style="width: 30px; height: 30px; font-size: 0.8em;">NW</span>
+                                        <span class="avatar-circle bg-info text-white" style="width: 30px; height: 30px; font-size: 0.8em;">SW</span>
+                                        <span class="badge bg-danger">2 needed</span>
+                                    </div>
+                                </td>
+                                <td>9:00 AM - 10:00 AM</td>
+                                <td><span class="badge bg-warning">Short-staffed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Feb 24, 2025</td>
+                                <td>Valentine's Dinner Setup</td>
+                                <td><span class="badge bg-purple">Hospitality</span></td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-purple text-white" style="width: 30px; height: 30px; font-size: 0.8em;">JC</span>
+                                        <span class="avatar-circle bg-purple text-white" style="width: 30px; height: 30px; font-size: 0.8em;">MO</span>
+                                        <span class="badge bg-warning">4 needed</span>
+                                    </div>
+                                </td>
+                                <td>3:00 PM - 6:00 PM</td>
+                                <td><span class="badge bg-warning">Volunteers Needed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Feb 25, 2025</td>
+                                <td>Youth Bible Study</td>
+                                <td><span class="badge bg-warning">Youth</span></td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <span class="avatar-circle bg-warning text-white" style="width: 30px; height: 30px; font-size: 0.8em;">PA</span>
+                                        <span class="avatar-circle bg-warning text-white" style="width: 30px; height: 30px; font-size: 0.8em;">+3</span>
+                                    </div>
+                                </td>
+                                <td>6:00 PM - 7:30 PM</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Volunteer Modal -->
+<div class="modal fade" id="addVolunteerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Volunteer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Select Member</label>
+                            <select class="form-select" required>
+                                <option value="">Select Church Member</option>
+                                <option value="1">John Kamau - Active Member</option>
+                                <option value="2">Mary Wanjiku - Active Member</option>
+                                <option value="3">Benjamin Wanyonyi - Active Member</option>
+                                <option value="4">Sharon Wekesa - Active Member</option>
+                                <option value="5">Kennedy Omondi - Active Member</option>
+                                <option value="6">Grace Akinyi - Active Member</option>
+                                <option value="7">David Ochieng - Active Member</option>
+                                <option value="8">Peter Apaa - Active Member</option>
+                            </select>
+                            <div class="form-text">Or <a href="#">add as new volunteer</a></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Volunteer Department</label>
+                            <select class="form-select" required>
+                                <option value="">Select Department</option>
+                                <option value="worship">Worship & Choir</option>
+                                <option value="ushering">Ushering & Protocol</option>
+                                <option value="children">Children's Ministry</option>
+                                <option value="youth">Youth Ministry</option>
+                                <option value="technical">Technical Team</option>
+                                <option value="hospitality">Hospitality & Events</option>
+                                <option value="other">Other Ministry</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Volunteer Role</label>
+                            <input type="text" class="form-control" placeholder="e.g., Greeter, Teacher, Sound Engineer" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" value="2025-02-20" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Time Commitment</label>
+                            <select class="form-select" required>
+                                <option value="weekly">Weekly</option>
+                                <option value="biweekly">Bi-weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="special">Special Events Only</option>
+                                <option value="flexible">Flexible</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Expected Hours/Week</label>
+                            <input type="number" class="form-control" min="1" max="40" value="5">
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">Skills & Qualifications</label>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-light text-dark border" style="cursor: pointer;">Teaching <i class="fas fa-times ms-1"></i></span>
+                                <span class="badge bg-light text-dark border" style="cursor: pointer;">Music <i class="fas fa-times ms-1"></i></span>
+                                <span class="badge bg-light text-dark border" style="cursor: pointer;">Tech <i class="fas fa-times ms-1"></i></span>
+                                <span class="badge bg-light text-dark border" style="cursor: pointer;">First Aid <i class="fas fa-times ms-1"></i></span>
+                                <span class="badge bg-light text-dark border" style="cursor: pointer;">Cooking <i class="fas fa-times ms-1"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Add a skill and press Enter">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Training Required</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="trainingBasic">
+                                <label class="form-check-label" for="trainingBasic">
+                                    Basic Orientation
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="trainingDepartment">
+                                <label class="form-check-label" for="trainingDepartment">
+                                    Department Specific
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="trainingSafety">
+                                <label class="form-check-label" for="trainingSafety">
+                                    Safety & First Aid
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Volunteer Status</label>
+                            <select class="form-select" required>
+                                <option value="active">Active</option>
+                                <option value="training">In Training</option>
+                                <option value="probation">Probation</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" rows="3" placeholder="Additional notes, availability, special considerations..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Save Volunteer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Task Modal -->
+<div class="modal fade" id="assignTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Volunteer Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Task Description</label>
+                        <input type="text" class="form-control" placeholder="e.g., Setup chairs for Sunday service" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Department</label>
+                        <select class="form-select" required>
+                            <option value="">Select Department</option>
+                            <option value="ushering">Ushering & Protocol</option>
+                            <option value="hospitality">Hospitality & Events</option>
+                            <option value="technical">Technical Team</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Time</label>
+                            <input type="time" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Assign To</label>
+                        <select class="form-select" multiple>
+                            <option value="1">Kennedy Omondi (Ushering)</option>
+                            <option value="2">Grace Akinyi (Ushering)</option>
+                            <option value="3">Jane Chepkoech (Hospitality)</option>
+                            <option value="4">Mary Okiror (Hospitality)</option>
+                            <option value="5">Richard Rono (Technical)</option>
+                        </select>
+                        <div class="form-text">Hold Ctrl/Cmd to select multiple volunteers</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Priority</label>
+                        <select class="form-select" required>
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Assign Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Volunteer Distribution Chart
+new Chart(document.getElementById('volunteerDistributionChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Worship', 'Ushering', 'Children', 'Youth', 'Technical', 'Hospitality'],
+        datasets: [{
+            data: [15, 12, 8, 6, 5, 10],
+            backgroundColor: [
+                'rgba(13, 110, 253, 0.8)',
+                'rgba(40, 167, 69, 0.8)',
+                'rgba(23, 162, 184, 0.8)',
+                'rgba(255, 193, 7, 0.8)',
+                'rgba(220, 53, 69, 0.8)',
+                'rgba(111, 66, 193, 0.8)'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        let value = context.raw || 0;
+                        return `${label}: ${value} volunteers`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Table filtering
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchVolunteers');
+    const statusFilter = document.getElementById('statusFilter');
+    const deptFilter = document.getElementById('departmentSelect');
+    const tableRows = document.querySelectorAll('#volunteersTable tbody tr');
+    
+    function filterVolunteers() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value;
+        const deptValue = deptFilter.value;
+        
+        tableRows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const department = row.cells[1].textContent.toLowerCase();
+            const status = row.cells[6].textContent.toLowerCase();
+            
+            const matchesSearch = name.includes(searchTerm) || 
+                                 row.cells[2].textContent.toLowerCase().includes(searchTerm);
+            const matchesStatus = !statusValue || status.includes(statusValue);
+            const matchesDept = !deptValue || department.includes(deptValue);
+            
+            row.style.display = matchesSearch && matchesStatus && matchesDept ? '' : 'none';
+        });
+    }
+    
+    searchInput.addEventListener('input', filterVolunteers);
+    statusFilter.addEventListener('change', filterVolunteers);
+    deptFilter.addEventListener('change', filterVolunteers);
+    
+    // Department filter for overview table
+    const deptOverviewFilter = document.getElementById('departmentFilter');
+    const overviewRows = document.querySelectorAll('.table-hover tbody tr');
+    
+    deptOverviewFilter.addEventListener('change', function() {
+        const filterValue = this.value;
+        
+        overviewRows.forEach(row => {
+            const department = row.cells[0].textContent.toLowerCase();
+            
+            if (!filterValue || department.includes(filterValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+    
+    // Skill badge removal
+    const skillBadges = document.querySelectorAll('.badge[style*="cursor: pointer"]');
+    skillBadges.forEach(badge => {
+        badge.addEventListener('click', function() {
+            this.remove();
+        });
+    });
+});
+</script>
+
+<style>
+.avatar-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.avatar-group {
+    display: flex;
+    gap: 5px;
+}
+
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.badge.bg-light {
+    transition: all 0.2s;
+}
+
+.badge.bg-light:hover {
+    background-color: #e9ecef !important;
+}
+
+.avatar-circle i {
+    font-size: 1.2em;
+}
+</style>
+{% endblock %}

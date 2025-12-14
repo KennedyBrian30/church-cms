@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Page Title{% endblock %}
+{% block content %}
+<h1>{{ member.first_name }} {{ member.last_name }}</h1>
+<p><strong>Email:</strong> {{ member.email or 'N/A' }}</p>
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>2025 Pledge Status</h5>
+            </div>
+            <div class="card-body text-center">
+                <h3>${{ "{:,.0f}".format(given) }} <small>of</small> ${{ "{:,.0f}".format(pledged) }}</h3>
+                <div class="progress mt-3" style="height: 40px;">
+                    <div class="progress-bar progress-bar-striped {% if pct >= 100 %}bg-success{% elif pct >= 75 %}bg-info{% else %}bg-warning{% endif %}"
+                         style="width: {{ pct }}%; font-size: 1.2rem;">
+                        {{ pct }}%
+                    </div>
+                </div>
+                {% if pct >= 100 %}
+                    <p class="mt-3 text-success"><strong>🎉 Pledge fulfilled!</strong></p>
+                {% elif pct >= 75 %}
+                    <p class="mt-3 text-info"><strong>👍 On track!</strong></p>
+                {% else %}
+                    <p class="mt-3 text-warning"><strong>⏳ Room to grow</strong></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Contribution History (2025)</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Fund</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Memo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in contributions %}
+        <tr>
+            <td>{{ c.contribution_date }}</td>
+            <td>{{ c.fund }}</td>
+            <td>${{ "{:,.2f}".format(c.amount) }}</td>
+            <td>{{ c.payment_method }}</td>
+            <td>{{ c.memo or '' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/" class="btn btn-secondary">← Back to Dashboard</a>
+{% endblock %}

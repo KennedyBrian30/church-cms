@@ -1,0 +1,810 @@
+{% extends "base.html" %}
+{% block title %}Church Events{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Church Events & Calendar</h1>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">
+            <i class="fas fa-calendar-plus"></i> Add Event
+        </button>
+        <button class="btn btn-outline-secondary" onclick="window.print()">
+            <i class="fas fa-print"></i> Print Calendar
+        </button>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">This Week</h5>
+                <h2 class="mb-0">8</h2>
+                <small>Events</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">This Month</h5>
+                <h2 class="mb-0">22</h2>
+                <small>Events</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Upcoming</h5>
+                <h2 class="mb-0">5</h5>
+                <small>Special Events</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Volunteers Needed</h5>
+                <h2 class="mb-0">18</h2>
+                <small>Open Slots</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Calendar and Upcoming Events -->
+<div class="row">
+    <!-- Calendar -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">February 2025</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary mx-2">Today</button>
+                    <button class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">Sun</th>
+                                <th class="text-center">Mon</th>
+                                <th class="text-center">Tue</th>
+                                <th class="text-center">Wed</th>
+                                <th class="text-center">Thu</th>
+                                <th class="text-center">Fri</th>
+                                <th class="text-center">Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-muted text-center">26</td>
+                                <td class="text-muted text-center">27</td>
+                                <td class="text-muted text-center">28</td>
+                                <td class="text-muted text-center">29</td>
+                                <td class="text-muted text-center">30</td>
+                                <td class="text-muted text-center">31</td>
+                                <td class="text-center">
+                                    <div>1</div>
+                                    <small class="badge bg-primary">Morning Prayer</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div>2</div>
+                                    <small class="badge bg-success">Main Service</small>
+                                    <small class="badge bg-info mt-1">Sunday School</small>
+                                </td>
+                                <td class="text-center">3</td>
+                                <td class="text-center">
+                                    <div>4</div>
+                                    <small class="badge bg-warning">Bible Study</small>
+                                </td>
+                                <td class="text-center">
+                                    <div>5</div>
+                                    <small class="badge bg-danger">Choir Practice</small>
+                                </td>
+                                <td class="text-center">6</td>
+                                <td class="text-center">7</td>
+                                <td class="text-center">
+                                    <div>8</div>
+                                    <small class="badge bg-success">Youth Service</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div>9</div>
+                                    <small class="badge bg-success">Main Service</small>
+                                    <small class="badge bg-info mt-1">Communion</small>
+                                </td>
+                                <td class="text-center">10</td>
+                                <td class="text-center">
+                                    <div>11</div>
+                                    <small class="badge bg-warning">Bible Study</small>
+                                </td>
+                                <td class="text-center">
+                                    <div>12</div>
+                                    <small class="badge bg-danger">Choir Practice</small>
+                                </td>
+                                <td class="text-center">13</td>
+                                <td class="text-center">
+                                    <div>14</div>
+                                    <small class="badge bg-purple">Valentine's Dinner</small>
+                                </td>
+                                <td class="text-center">
+                                    <div>15</div>
+                                    <small class="badge bg-success">Youth Service</small>
+                                    <small class="badge bg-warning mt-1">Leadership Mtg</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div>16</div>
+                                    <small class="badge bg-success">Main Service</small>
+                                    <small class="badge bg-info mt-1">Baby Dedication</small>
+                                </td>
+                                <td class="text-center">17</td>
+                                <td class="text-center">
+                                    <div>18</div>
+                                    <small class="badge bg-warning">Bible Study</small>
+                                </td>
+                                <td class="text-center">
+                                    <div>19</div>
+                                    <small class="badge bg-danger">Choir Practice</small>
+                                </td>
+                                <td class="text-center">20</td>
+                                <td class="text-center">21</td>
+                                <td class="text-center">
+                                    <div>22</div>
+                                    <small class="badge bg-success">Youth Service</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div>23</div>
+                                    <small class="badge bg-success">Main Service</small>
+                                    <small class="badge bg-info mt-1">Guest Speaker</small>
+                                </td>
+                                <td class="text-center">24</td>
+                                <td class="text-center">
+                                    <div>25</div>
+                                    <small class="badge bg-warning">Bible Study</small>
+                                </td>
+                                <td class="text-center">
+                                    <div>26</div>
+                                    <small class="badge bg-danger">Choir Practice</small>
+                                </td>
+                                <td class="text-center">
+                                    <div>27</div>
+                                    <small class="badge bg-teal">Women's Fellowship</small>
+                                </td>
+                                <td class="text-center">28</td>
+                                <td class="text-center">
+                                    <div>1</div>
+                                    <small class="badge bg-success">Youth Service</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events Sidebar -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Upcoming Events</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Valentine's Couples Dinner</h6>
+                            <small class="text-warning">14 Feb</small>
+                        </div>
+                        <p class="mb-1 small">Annual couples dinner and marriage enrichment</p>
+                        <small class="text-muted"><i class="fas fa-clock"></i> 6:00 PM - 9:00 PM</small>
+                        <div class="mt-2">
+                            <span class="badge bg-purple">Special Event</span>
+                            <span class="badge bg-secondary">40 Registered</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Baby Dedication Service</h6>
+                            <small class="text-warning">16 Feb</small>
+                        </div>
+                        <p class="mb-1 small">Special service for dedicating babies to the Lord</p>
+                        <small class="text-muted"><i class="fas fa-clock"></i> 10:00 AM - 12:00 PM</small>
+                        <div class="mt-2">
+                            <span class="badge bg-info">Main Service</span>
+                            <span class="badge bg-success">5 Babies</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Women's Fellowship</h6>
+                            <small class="text-warning">27 Feb</small>
+                        </div>
+                        <p class="mb-1 small">Monthly women's prayer and fellowship meeting</p>
+                        <small class="text-muted"><i class="fas fa-clock"></i> 4:00 PM - 6:00 PM</small>
+                        <div class="mt-2">
+                            <span class="badge bg-teal">Fellowship</span>
+                            <span class="badge bg-warning">8 Volunteers Needed</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Youth Camp Meeting</h6>
+                            <small class="text-warning">1 Mar</small>
+                        </div>
+                        <p class="mb-1 small">Planning meeting for upcoming youth camp</p>
+                        <small class="text-muted"><i class="fas fa-clock"></i> 2:00 PM - 4:00 PM</small>
+                        <div class="mt-2">
+                            <span class="badge bg-success">Youth</span>
+                            <span class="badge bg-info">Planning</span>
+                        </div>
+                    </div>
+                    
+                    <div class="list-group-item px-0">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Men's Breakfast</h6>
+                            <small class="text-warning">8 Mar</small>
+                        </div>
+                        <p class="mb-1 small">Monthly men's breakfast and Bible study</p>
+                        <small class="text-muted"><i class="fas fa-clock"></i> 8:00 AM - 10:00 AM</small>
+                        <div class="mt-2">
+                            <span class="badge bg-primary">Men</span>
+                            <span class="badge bg-secondary">RSVP Required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Event Types Legend -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">Event Types</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-success">Main Service</span>
+                    <span class="badge bg-info">Sunday School</span>
+                    <span class="badge bg-warning">Bible Study</span>
+                    <span class="badge bg-danger">Choir Practice</span>
+                    <span class="badge bg-purple">Special Event</span>
+                    <span class="badge bg-teal">Fellowship</span>
+                    <span class="badge bg-primary">Men</span>
+                    <span class="badge bg-pink">Women</span>
+                    <span class="badge bg-success">Youth</span>
+                    <span class="badge bg-secondary">Planning</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Events Table -->
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">All Events</h5>
+        <div class="d-flex gap-2">
+            <input type="text" class="form-control form-control-sm" placeholder="Search events..." id="searchEvents">
+            <select class="form-select form-select-sm" style="width: auto;" id="eventTypeFilter">
+                <option value="">All Types</option>
+                <option value="Service">Services</option>
+                <option value="Fellowship">Fellowship</option>
+                <option value="Meeting">Meetings</option>
+                <option value="Special">Special Events</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="eventsTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date & Time</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Coordinator</th>
+                        <th>Attendance</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Weekly Services -->
+                    <tr>
+                        <td>
+                            <strong>Sunday Main Service</strong>
+                            <div class="small text-muted">Weekly worship service</div>
+                        </td>
+                        <td>
+                            <div>Every Sunday</div>
+                            <div class="small text-muted">10:00 AM - 12:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-success">Service</span></td>
+                        <td>Main Sanctuary</td>
+                        <td>Rev. Wycliffe Mukhwana</td>
+                        <td>65 avg</td>
+                        <td><span class="badge bg-success">Ongoing</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <strong>Sunday School</strong>
+                            <div class="small text-muted">Children's ministry</div>
+                        </td>
+                        <td>
+                            <div>Every Sunday</div>
+                            <div class="small text-muted">9:00 AM - 10:00 AM</div>
+                        </td>
+                        <td><span class="badge bg-info">Service</span></td>
+                        <td>Children's Hall</td>
+                        <td>Naomi Wangila</td>
+                        <td>25 avg</td>
+                        <td><span class="badge bg-success">Ongoing</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <strong>Youth Service</strong>
+                            <div class="small text-muted">Youth worship and fellowship</div>
+                        </td>
+                        <td>
+                            <div>Every Saturday</div>
+                            <div class="small text-muted">4:00 PM - 6:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-success">Service</span></td>
+                        <td>Youth Hall</td>
+                        <td>Kennedy Omondi</td>
+                        <td>35 avg</td>
+                        <td><span class="badge bg-success">Ongoing</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Bible Studies -->
+                    <tr>
+                        <td>
+                            <strong>Tuesday Bible Study</strong>
+                            <div class="small text-muted">Midweek Bible study</div>
+                        </td>
+                        <td>
+                            <div>Every Tuesday</div>
+                            <div class="small text-muted">6:00 PM - 7:30 PM</div>
+                        </td>
+                        <td><span class="badge bg-warning">Meeting</span></td>
+                        <td>Fellowship Hall</td>
+                        <td>Benjamin Wanyonyi</td>
+                        <td>20 avg</td>
+                        <td><span class="badge bg-success">Ongoing</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Choir Practice -->
+                    <tr>
+                        <td>
+                            <strong>Choir Practice</strong>
+                            <div class="small text-muted">Worship team rehearsal</div>
+                        </td>
+                        <td>
+                            <div>Every Wednesday</div>
+                            <div class="small text-muted">5:00 PM - 7:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-danger">Meeting</span></td>
+                        <td>Main Sanctuary</td>
+                        <td>Alice Akinyi</td>
+                        <td>15 avg</td>
+                        <td><span class="badge bg-success">Ongoing</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Special Events -->
+                    <tr>
+                        <td>
+                            <strong>Valentine's Couples Dinner</strong>
+                            <div class="small text-muted">Annual couples dinner</div>
+                        </td>
+                        <td>
+                            <div>Feb 14, 2025</div>
+                            <div class="small text-muted">6:00 PM - 9:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-purple">Special Event</span></td>
+                        <td>Church Grounds</td>
+                        <td>Peter Apaa & Mary Okiror</td>
+                        <td>40 registered</td>
+                        <td><span class="badge bg-warning">Upcoming</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <strong>Baby Dedication Service</strong>
+                            <div class="small text-muted">Special dedication service</div>
+                        </td>
+                        <td>
+                            <div>Feb 16, 2025</div>
+                            <div class="small text-muted">10:00 AM - 12:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-info">Service</span></td>
+                        <td>Main Sanctuary</td>
+                        <td>Rev. Wycliffe Mukhwana</td>
+                        <td>5 families</td>
+                        <td><span class="badge bg-warning">Upcoming</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <strong>Women's Fellowship</strong>
+                            <div class="small text-muted">Monthly women's meeting</div>
+                        </td>
+                        <td>
+                            <div>Feb 27, 2025</div>
+                            <div class="small text-muted">4:00 PM - 6:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-teal">Fellowship</span></td>
+                        <td>Fellowship Hall</td>
+                        <td>Jane Chepkoech</td>
+                        <td>25 expected</td>
+                        <td><span class="badge bg-warning">Upcoming</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <strong>Men's Breakfast</strong>
+                            <div class="small text-muted">Monthly men's gathering</div>
+                        </td>
+                        <td>
+                            <div>Mar 8, 2025</div>
+                            <div class="small text-muted">8:00 AM - 10:00 AM</div>
+                        </td>
+                        <td><span class="badge bg-primary">Fellowship</span></td>
+                        <td>Church Kitchen</td>
+                        <td>Kipchoge Cheruiyot</td>
+                        <td>18 registered</td>
+                        <td><span class="badge bg-warning">Upcoming</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <strong>Easter Sunday Service</strong>
+                            <div class="small text-muted">Special Easter celebration</div>
+                        </td>
+                        <td>
+                            <div>Apr 20, 2025</div>
+                            <div class="small text-muted">9:00 AM - 12:00 PM</div>
+                        </td>
+                        <td><span class="badge bg-purple">Special Event</span></td>
+                        <td>Main Sanctuary</td>
+                        <td>Rev. Wycliffe Mukhwana</td>
+                        <td>-</td>
+                        <td><span class="badge bg-info">Planned</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Add Event Modal -->
+<div class="modal fade" id="addEventModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Event Name</label>
+                            <input type="text" class="form-control" placeholder="Enter event name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Event Type</label>
+                            <select class="form-select" required>
+                                <option value="">Select Type</option>
+                                <option value="service">Service</option>
+                                <option value="fellowship">Fellowship</option>
+                                <option value="meeting">Meeting</option>
+                                <option value="special">Special Event</option>
+                                <option value="training">Training</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date & Time</label>
+                            <input type="datetime-local" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date & Time</label>
+                            <input type="datetime-local" class="form-control" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Location</label>
+                            <select class="form-select" required>
+                                <option value="">Select Location</option>
+                                <option value="sanctuary">Main Sanctuary</option>
+                                <option value="fellowship_hall">Fellowship Hall</option>
+                                <option value="youth_hall">Youth Hall</option>
+                                <option value="children_hall">Children's Hall</option>
+                                <option value="kitchen">Church Kitchen</option>
+                                <option value="grounds">Church Grounds</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Event Coordinator</label>
+                            <select class="form-select" required>
+                                <option value="">Select Coordinator</option>
+                                <option value="1">Rev. Wycliffe Mukhwana</option>
+                                <option value="2">Naomi Wangila</option>
+                                <option value="3">Benjamin Wanyonyi</option>
+                                <option value="4">Kennedy Omondi</option>
+                                <option value="5">Alice Akinyi</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter event description"></textarea>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Target Audience</label>
+                            <select class="form-select" multiple>
+                                <option value="all">All Members</option>
+                                <option value="youth">Youth</option>
+                                <option value="men">Men</option>
+                                <option value="women">Women</option>
+                                <option value="children">Children</option>
+                                <option value="leaders">Church Leaders</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Volunteers Needed</label>
+                            <input type="number" class="form-control" min="0" placeholder="Number of volunteers">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="recurringEvent">
+                                <label class="form-check-label" for="recurringEvent">
+                                    Recurring Event
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="requiresRegistration">
+                                <label class="form-check-label" for="requiresRegistration">
+                                    Requires Registration
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Save Event</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Event filtering functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchEvents');
+    const typeFilter = document.getElementById('eventTypeFilter');
+    const tableRows = document.querySelectorAll('#eventsTable tbody tr');
+    
+    function filterEvents() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const typeValue = typeFilter.value;
+        
+        tableRows.forEach(row => {
+            const eventName = row.cells[0].textContent.toLowerCase();
+            const eventType = row.cells[2].textContent;
+            
+            const matchesSearch = eventName.includes(searchTerm) || 
+                                 row.cells[1].textContent.toLowerCase().includes(searchTerm) ||
+                                 row.cells[3].textContent.toLowerCase().includes(searchTerm);
+            const matchesType = !typeValue || eventType.includes(typeValue);
+            
+            row.style.display = matchesSearch && matchesType ? '' : 'none';
+        });
+    }
+    
+    searchInput.addEventListener('input', filterEvents);
+    typeFilter.addEventListener('change', filterEvents);
+    
+    // Calendar day click handler
+    const calendarDays = document.querySelectorAll('.table-bordered td');
+    calendarDays.forEach(day => {
+        if (!day.classList.contains('text-muted')) {
+            day.style.cursor = 'pointer';
+            day.addEventListener('click', function() {
+                const date = this.querySelector('div').textContent;
+                alert(`Viewing events for February ${date}, 2025`);
+            });
+        }
+    });
+});
+</script>
+
+<style>
+.table-bordered td {
+    height: 100px;
+    vertical-align: top;
+    padding: 8px;
+    position: relative;
+}
+
+.table-bordered td.text-center {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.table-bordered td.text-center:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.table-bordered td .badge {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.7em;
+    padding: 3px 6px;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.bg-teal {
+    background-color: #20c997 !important;
+}
+
+.bg-pink {
+    background-color: #e83e8c !important;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+}
+</style>
+{% endblock %}

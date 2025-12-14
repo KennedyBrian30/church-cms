@@ -1,0 +1,837 @@
+{% extends "base.html" %}
+{% block title %}Church Members{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Church Members</h1>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+        <i class="fas fa-user-plus"></i> Add New Member
+    </button>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Search Member</label>
+                <input type="text" class="form-control" id="searchMember" placeholder="Name or phone...">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Community</label>
+                <select class="form-select" id="communityFilter">
+                    <option value="">All Communities</option>
+                    <option value="Luhya">Luhya</option>
+                    <option value="Luo">Luo</option>
+                    <option value="Teso">Teso</option>
+                    <option value="Kikuyu">Kikuyu</option>
+                    <option value="Kalenjin">Kalenjin</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Membership Status</label>
+                <select class="form-select" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Visitor">Visitor</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Small Group</label>
+                <select class="form-select" id="groupFilter">
+                    <option value="">All Groups</option>
+                    <option value="A">Group A</option>
+                    <option value="B">Group B</option>
+                    <option value="C">Group C</option>
+                    <option value="D">Group D</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-2">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Members</h5>
+                <h2 class="mb-0">80</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Active</h5>
+                <h2 class="mb-0">72</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">New This Month</h5>
+                <h2 class="mb-0">8</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Birthdays</h5>
+                <h2 class="mb-0">3</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-secondary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Visitors</h5>
+                <h2 class="mb-0">12</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Inactive</h5>
+                <h2 class="mb-0">8</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Members Table -->
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover" id="membersTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Community</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Small Group</th>
+                        <th>Join Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Luhya Names -->
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    WM
+                                </div>
+                                <div>
+                                    <strong>Wycliffe Mukhwana</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Luhya</span></td>
+                        <td>0712 345 678</td>
+                        <td>wmukhwana@email.com</td>
+                        <td>45</td>
+                        <td><span class="badge bg-info">Group A</span></td>
+                        <td>2022-03-15</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    NW
+                                </div>
+                                <div>
+                                    <strong>Naomi Wangila</strong>
+                                    <div class="small text-muted">Female</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Luhya</span></td>
+                        <td>0713 456 789</td>
+                        <td>nwangila@email.com</td>
+                        <td>38</td>
+                        <td><span class="badge bg-success">Group B</span></td>
+                        <td>2021-06-22</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    BW
+                                </div>
+                                <div>
+                                    <strong>Benjamin Wanyonyi</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Luhya</span></td>
+                        <td>0714 567 890</td>
+                        <td>bwanyonyi@email.com</td>
+                        <td>52</td>
+                        <td><span class="badge bg-warning">Group C</span></td>
+                        <td>2020-11-10</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    SW
+                                </div>
+                                <div>
+                                    <strong>Sharon Wekesa</strong>
+                                    <div class="small text-muted">Female</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Luhya</span></td>
+                        <td>0715 678 901</td>
+                        <td>swekesa@email.com</td>
+                        <td>29</td>
+                        <td><span class="badge bg-info">Group A</span></td>
+                        <td>2023-02-14</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Luo Names -->
+                    <tr>
+                        <td>5</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    KO
+                                </div>
+                                <div>
+                                    <strong>Kennedy Omondi</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info">Luo</span></td>
+                        <td>0716 789 012</td>
+                        <td>komondi@email.com</td>
+                        <td>41</td>
+                        <td><span class="badge bg-danger">Group D</span></td>
+                        <td>2021-09-05</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    AA
+                                </div>
+                                <div>
+                                    <strong>Alice Akinyi</strong>
+                                    <div class="small text-muted">Female</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info">Luo</span></td>
+                        <td>0717 890 123</td>
+                        <td>aakinyi@email.com</td>
+                        <td>36</td>
+                        <td><span class="badge bg-success">Group B</span></td>
+                        <td>2022-07-18</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    OA
+                                </div>
+                                <div>
+                                    <strong>Odhiambo Awuor</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info">Luo</span></td>
+                        <td>0718 901 234</td>
+                        <td>oawuor@email.com</td>
+                        <td>48</td>
+                        <td><span class="badge bg-warning">Group C</span></td>
+                        <td>2020-12-03</td>
+                        <td><span class="badge bg-secondary">Inactive</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Teso Names -->
+                    <tr>
+                        <td>8</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    PA
+                                </div>
+                                <div>
+                                    <strong>Peter Apaa</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-success">Teso</span></td>
+                        <td>0719 012 345</td>
+                        <td>papaa@email.com</td>
+                        <td>33</td>
+                        <td><span class="badge bg-info">Group A</span></td>
+                        <td>2023-04-20</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    MO
+                                </div>
+                                <div>
+                                    <strong>Mary Okiror</strong>
+                                    <div class="small text-muted">Female</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-success">Teso</span></td>
+                        <td>0720 123 456</td>
+                        <td>mokiror@email.com</td>
+                        <td>27</td>
+                        <td><span class="badge bg-danger">Group D</span></td>
+                        <td>2023-01-15</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Kikuyu Names -->
+                    <tr>
+                        <td>10</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    JK
+                                </div>
+                                <div>
+                                    <strong>John Kamau</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-warning">Kikuyu</span></td>
+                        <td>0721 234 567</td>
+                        <td>jkamau@email.com</td>
+                        <td>55</td>
+                        <td><span class="badge bg-success">Group B</span></td>
+                        <td>2019-08-12</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    MW
+                                </div>
+                                <div>
+                                    <strong>Mary Wanjiku</strong>
+                                    <div class="small text-muted">Female</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-warning">Kikuyu</span></td>
+                        <td>0722 345 678</td>
+                        <td>mwanjiku@email.com</td>
+                        <td>42</td>
+                        <td><span class="badge bg-warning">Group C</span></td>
+                        <td>2020-05-30</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    DM
+                                </div>
+                                <div>
+                                    <strong>David Mwangi</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-warning">Kikuyu</span></td>
+                        <td>0723 456 789</td>
+                        <td>dmwangi@email.com</td>
+                        <td>31</td>
+                        <td><span class="badge bg-info">Group A</span></td>
+                        <td>2022-11-25</td>
+                        <td><span class="badge bg-warning">Visitor</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Kalenjin Names -->
+                    <tr>
+                        <td>13</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    KC
+                                </div>
+                                <div>
+                                    <strong>Kipchoge Cheruiyot</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-danger">Kalenjin</span></td>
+                        <td>0724 567 890</td>
+                        <td>kcheruiyot@email.com</td>
+                        <td>39</td>
+                        <td><span class="badge bg-danger">Group D</span></td>
+                        <td>2021-10-08</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-danger text-white me-3">
+                                    JC
+                                </div>
+                                <div>
+                                    <strong>Jane Chepkoech</strong>
+                                    <div class="small text-muted">Female</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-danger">Kalenjin</span></td>
+                        <td>0725 678 901</td>
+                        <td>jchepkoech@email.com</td>
+                        <td>34</td>
+                        <td><span class="badge bg-success">Group B</span></td>
+                        <td>2022-06-14</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3">
+                                    RR
+                                </div>
+                                <div>
+                                    <strong>Richard Rono</strong>
+                                    <div class="small text-muted">Male</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-danger">Kalenjin</span></td>
+                        <td>0726 789 012</td>
+                        <td>rrono@email.com</td>
+                        <td>47</td>
+                        <td><span class="badge bg-warning">Group C</span></td>
+                        <td>2020-02-28</td>
+                        <td><span class="badge bg-secondary">Inactive</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Add Member Modal -->
+<div class="modal fade" id="addMemberModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Community</label>
+                            <select class="form-select" required>
+                                <option value="">Select Community</option>
+                                <option value="Luhya">Luhya</option>
+                                <option value="Luo">Luo</option>
+                                <option value="Teso">Teso</option>
+                                <option value="Kikuyu">Kikuyu</option>
+                                <option value="Kalenjin">Kalenjin</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Join Date</label>
+                            <input type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Small Group</label>
+                            <select class="form-select">
+                                <option value="">Select Group</option>
+                                <option value="A">Group A</option>
+                                <option value="B">Group B</option>
+                                <option value="C">Group C</option>
+                                <option value="D">Group D</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Membership Status</label>
+                            <select class="form-select" required>
+                                <option value="Active">Active</option>
+                                <option value="Visitor">Visitor</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Residence</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Save Member</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Community Distribution Card -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">Community Distribution</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <canvas id="communityChart" height="200"></canvas>
+            </div>
+            <div class="col-md-4">
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Luhya Community
+                        <span class="badge bg-primary rounded-pill">32 members</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Luo Community
+                        <span class="badge bg-info rounded-pill">18 members</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Kikuyu Community
+                        <span class="badge bg-warning rounded-pill">15 members</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Kalenjin Community
+                        <span class="badge bg-danger rounded-pill">10 members</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Teso Community
+                        <span class="badge bg-success rounded-pill">5 members</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Community Distribution Chart
+new Chart(document.getElementById('communityChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Luhya', 'Luo', 'Kikuyu', 'Kalenjin', 'Teso'],
+        datasets: [{
+            label: 'Number of Members',
+            data: [32, 18, 15, 10, 5],
+            backgroundColor: [
+                'rgba(13, 110, 253, 0.7)',
+                'rgba(23, 162, 184, 0.7)',
+                'rgba(255, 193, 7, 0.7)',
+                'rgba(220, 53, 69, 0.7)',
+                'rgba(40, 167, 69, 0.7)'
+            ],
+            borderColor: [
+                '#0d6efd',
+                '#17a2b8',
+                '#ffc107',
+                '#dc3545',
+                '#28a745'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 5
+                }
+            }
+        }
+    }
+});
+
+// Table filtering functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchMember');
+    const communityFilter = document.getElementById('communityFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const groupFilter = document.getElementById('groupFilter');
+    const tableRows = document.querySelectorAll('#membersTable tbody tr');
+    
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const communityValue = communityFilter.value;
+        const statusValue = statusFilter.value;
+        const groupValue = groupFilter.value;
+        
+        tableRows.forEach(row => {
+            const name = row.cells[1].textContent.toLowerCase();
+            const community = row.cells[2].textContent;
+            const status = row.cells[8].textContent;
+            const group = row.cells[6].textContent;
+            
+            const matchesSearch = name.includes(searchTerm) || 
+                                 row.cells[3].textContent.includes(searchTerm);
+            const matchesCommunity = !communityValue || community.includes(communityValue);
+            const matchesStatus = !statusValue || status.includes(statusValue);
+            const matchesGroup = !groupValue || group.includes(groupValue);
+            
+            row.style.display = matchesSearch && matchesCommunity && matchesStatus && matchesGroup 
+                ? '' : 'none';
+        });
+    }
+    
+    searchInput.addEventListener('input', filterTable);
+    communityFilter.addEventListener('change', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+    groupFilter.addEventListener('change', filterTable);
+});
+</script>
+
+<style>
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+</style>
+{% endblock %}

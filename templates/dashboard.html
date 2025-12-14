@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-primary">Main Dashboard</h1>
+
+<!-- KPI Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5>Total Pledged (2025)</h5>
+                <h3>KES {{ "{:,.0f}".format(total_pledged|default(0)) }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5>Received YTD</h5>
+                <h3>KES {{ "{:,.0f}".format(total_given|default(0)) }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5>Overall Progress</h5>
+                <h3>{{ overall_pct|default(0) }}%</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5>Active Members</h5>
+                <h3>80</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 1 -->
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>2025 Pledge Progress by Member</h5></div>
+            <div class="card-body">
+                <canvas id="pledgeChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>Fund Distribution (YTD)</h5></div>
+            <div class="card-body">
+                <canvas id="fundPie"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2 -->
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>Members Per Group</h5></div>
+            <div class="card-body">
+                <canvas id="groupChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>Membership by Age Group</h5></div>
+            <div class="card-body">
+                <canvas id="ageGroupChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>Service Attendance</h5></div>
+            <div class="card-body">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 3 -->
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>Monthly Donation Trend</h5></div>
+            <div class="card-body">
+                <canvas id="donationLine"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header"><h5>Volunteer Participation</h5></div>
+            <div class="card-body">
+                <canvas id="volunteerChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Table Section -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Contributions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Member</th>
+                                <th>Type</th>
+                                <th>Amount (KES)</th>
+                                <th>Service</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-02-15</td>
+                                <td>John Kamau</td>
+                                <td>Tithe</td>
+                                <td>5,000</td>
+                                <td>Main Service</td>
+                            </tr>
+                            <tr>
+                                <td>2025-02-15</td>
+                                <td>Mary Wanjiku</td>
+                                <td>Offering</td>
+                                <td>2,500</td>
+                                <td>Morning Service</td>
+                            </tr>
+                            <tr>
+                                <td>2025-02-08</td>
+                                <td>David Ochieng</td>
+                                <td>Development</td>
+                                <td>10,000</td>
+                                <td>Main Service</td>
+                            </tr>
+                            <tr>
+                                <td>2025-02-08</td>
+                                <td>Grace Akinyi</td>
+                                <td>Tithe</td>
+                                <td>7,500</td>
+                                <td>Youth Service</td>
+                            </tr>
+                            <tr>
+                                <td>2025-02-01</td>
+                                <td>Peter Mwangi</td>
+                                <td>Offering</td>
+                                <td>3,000</td>
+                                <td>Sunday School</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Pledge Progress - Horizontal Bar
+new Chart(document.getElementById('pledgeChart'), {
+    type: 'bar',
+    data: {
+        labels: [{% for m in members_pledge %}'{{ m.member }}',{% endfor %}],
+        datasets: [{
+            label: 'Pledge Fulfillment %',
+            data: [{% for m in members_pledge %}{{ m.pct }},{% endfor %}],
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: '#007bff',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: { 
+            x: { 
+                max: 100, 
+                title: { 
+                    display: true, 
+                    text: '% Complete' 
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            } 
+        },
+        plugins: { legend: { display: false } }
+    }
+});
+
+// Updated Fund Distribution Pie (Tithes, Offerings, Development)
+new Chart(document.getElementById('fundPie'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Tithes', 'Offerings', 'Development'],
+        datasets: [{
+            data: [450000, 180000, 120000],
+            backgroundColor: ['#28a745', '#17a2b8', '#ffc107'],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: { 
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        let value = context.raw || 0;
+                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let percentage = Math.round((value / total) * 100);
+                        return `${label}: KES ${value.toLocaleString()} (${percentage}%)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Members Per Group Chart
+new Chart(document.getElementById('groupChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Group A', 'Group B', 'Group C', 'Group D'],
+        datasets: [{
+            label: 'Number of Members',
+            data: [22, 18, 25, 15],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)'
+            ],
+            borderColor: [
+                '#dc3545',
+                '#007bff',
+                '#ffc107',
+                '#20c997'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Number of Members'
+                },
+                ticks: {
+                    stepSize: 5
+                }
+            }
+        }
+    }
+});
+
+// Age Group Distribution
+new Chart(document.getElementById('ageGroupChart'), {
+    type: 'pie',
+    data: {
+        labels: ['0-14 Years', '15-21 Years', '22-35 Years', '36+ Years'],
+        datasets: [{
+            data: [15, 20, 30, 15],
+            backgroundColor: [
+                'rgba(255, 159, 64, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 99, 132, 0.8)'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        let value = context.raw || 0;
+                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let percentage = Math.round((value / total) * 100);
+                        return `${label}: ${value} members (${percentage}%)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Service Attendance Chart
+new Chart(document.getElementById('attendanceChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Morning Service', 'Sunday School', 'Youth Service', 'Main Service'],
+        datasets: [{
+            label: 'Average Attendance',
+            data: [45, 25, 35, 65],
+            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+            borderColor: '#28a745',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Number of Attendees'
+                },
+                ticks: {
+                    stepSize: 10
+                }
+            }
+        }
+    }
+});
+
+// Donation Trend Line (Updated to KES)
+new Chart(document.getElementById('donationLine'), {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+            label: 'Monthly Donations (KES)',
+            data: [85000, 92000, 105000, 120000, 98000, 115000, 125000, 0, 0, 0, 0, 0],
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            tension: 0.3,
+            fill: true,
+            borderWidth: 3
+        }]
+    },
+    options: { 
+        responsive: true,
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(value) {
+                        return 'KES ' + value.toLocaleString();
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Additional Visual: Volunteer Participation
+new Chart(document.getElementById('volunteerChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Active Volunteers', 'Occasional Volunteers', 'Non-Volunteers'],
+        datasets: [{
+            data: [25, 35, 20],
+            backgroundColor: [
+                'rgba(40, 167, 69, 0.8)',
+                'rgba(255, 193, 7, 0.8)',
+                'rgba(108, 117, 125, 0.8)'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        let value = context.raw || 0;
+                        return `${label}: ${value} members`;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+
+<style>
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+</style>
+{% endblock %}
