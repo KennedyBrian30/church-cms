@@ -2,58 +2,58 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<!-- Page Header -->
+<!-- Welcoming Header -->
 <div class="text-center mb-5 pt-4">
     <h1 class="display-5 text-primary fw-bold">Church Management Dashboard</h1>
-    <p class="lead text-muted">As of December 14, 2025</p>
+    <p class="lead text-muted">Key insights and metrics at a glance • As of December 14, 2025</p>
 </div>
 
-<!-- KPI Cards - Fully Responsive -->
+<!-- KPI Cards -->
 <div class="row g-4 mb-5">
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card text-white bg-success h-100 shadow-sm border-0">
-            <div class="card-body d-flex flex-column justify-content-center text-center">
-                <i class="bi bi-wallet2 display-4 mb-3 opacity-75"></i>
-                <h5 class="card-title">Total Pledged (2025)</h5>
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card text-white bg-success h-100 shadow-sm text-center">
+            <div class="card-body py-4">
+                <i class="bi bi-wallet2 display-5 mb-2"></i>
+                <h5>Total Pledged (2025)</h5>
                 <h3 class="mb-0">KES {{ "{:,.0f}".format(total_pledged|default(0)) }}</h3>
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card text-white bg-info h-100 shadow-sm border-0">
-            <div class="card-body d-flex flex-column justify-content-center text-center">
-                <i class="bi bi-cash-stack display-4 mb-3 opacity-75"></i>
-                <h5 class="card-title">Received YTD</h5>
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card text-white bg-info h-100 shadow-sm text-center">
+            <div class="card-body py-4">
+                <i class="bi bi-cash-stack display-5 mb-2"></i>
+                <h5>Received YTD</h5>
                 <h3 class="mb-0">KES {{ "{:,.0f}".format(total_given|default(0)) }}</h3>
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card text-white bg-warning h-100 shadow-sm border-0">
-            <div class="card-body d-flex flex-column justify-content-center text-center">
-                <i class="bi bi-graph-up-arrow display-4 mb-3 opacity-75"></i>
-                <h5 class="card-title">Overall Progress</h5>
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card text-white bg-warning h-100 shadow-sm text-center">
+            <div class="card-body py-4">
+                <i class="bi bi-graph-up-arrow display-5 mb-2"></i>
+                <h5>Overall Progress</h5>
                 <h3 class="mb-0">{{ overall_pct|default(0) }}%</h3>
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card text-white bg-primary h-100 shadow-sm border-0">
-            <div class="card-body d-flex flex-column justify-content-center text-center">
-                <i class="bi bi-people-fill display-4 mb-3 opacity-75"></i>
-                <h5 class="card-title">Active Members</h5>
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card text-white bg-primary h-100 shadow-sm text-center">
+            <div class="card-body py-4">
+                <i class="bi bi-people-fill display-5 mb-2"></i>
+                <h5>Active Members</h5>
                 <h3 class="mb-0">80</h3>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Charts Section 1: Two Large Charts -->
+<!-- Charts Section 1 -->
 <div class="row g-4 mb-5">
     <div class="col-12 col-lg-6">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>2025 Pledge Progress by Member</h5>
+                <h5 class="mb-0"><i class="bi bi-bar-chart-line-fill me-2"></i>2025 Pledge Progress by Member</h5>
             </div>
             <div class="card-body">
                 <canvas id="pledgeChart" height="300"></canvas>
@@ -72,7 +72,7 @@
     </div>
 </div>
 
-<!-- Charts Section 2: Three Medium Charts -->
+<!-- Charts Section 2 -->
 <div class="row g-4 mb-5">
     <div class="col-12 col-md-6 col-lg-4">
         <div class="card shadow-sm h-100">
@@ -87,7 +87,7 @@
     <div class="col-12 col-md-6 col-lg-4">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-cake2 me-2"></i>Membership by Age Group</h5>
+                <h5 class="mb-0"><i class="bi bi-cake2-fill me-2"></i>Membership by Age Group</h5>
             </div>
             <div class="card-body">
                 <canvas id="ageGroupChart"></canvas>
@@ -97,7 +97,7 @@
     <div class="col-12 col-md-12 col-lg-4">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Service Attendance</h5>
+                <h5 class="mb-0"><i class="bi bi-calendar-check-fill me-2"></i>Service Attendance</h5>
             </div>
             <div class="card-body">
                 <canvas id="attendanceChart"></canvas>
@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<!-- Charts Section 3: Trend Charts -->
+<!-- Trend Charts & Recent Contributions -->
 <div class="row g-4 mb-5">
     <div class="col-12 col-lg-6">
         <div class="card shadow-sm h-100">
@@ -120,22 +120,8 @@
     </div>
     <div class="col-12 col-lg-6">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-hand-thumbs-up me-2"></i>Volunteer Participation</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="volunteerChart" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Contributions Table -->
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow-sm">
-            <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-table me-2"></i>Recent Contributions (Last 5)</h5>
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-table me-2"></i>Recent Contributions</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -147,7 +133,6 @@
                                 <th>Type</th>
                                 <th>Amount (KES)</th>
                                 <th>Service</th>
-                                <th>Progress</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,41 +140,36 @@
                                 <td>2025-02-15</td>
                                 <td><strong>John Kamau</strong></td>
                                 <td>Tithe</td>
-                                <td class="fw-bold">5,000</td>
+                                <td class="fw-bold text-success">5,000</td>
                                 <td>Main Service</td>
-                                <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 100%"></div></div></td>
                             </tr>
                             <tr>
                                 <td>2025-02-15</td>
                                 <td><strong>Mary Wanjiku</strong></td>
                                 <td>Offering</td>
-                                <td class="fw-bold">2,500</td>
+                                <td class="fw-bold text-info">2,500</td>
                                 <td>Morning Service</td>
-                                <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-info" style="width: 50%"></div></div></td>
                             </tr>
                             <tr>
                                 <td>2025-02-08</td>
                                 <td><strong>David Ochieng</strong></td>
                                 <td>Development</td>
-                                <td class="fw-bold">10,000</td>
+                                <td class="fw-bold text-warning">10,000</td>
                                 <td>Main Service</td>
-                                <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-warning" style="width: 80%"></div></div></td>
                             </tr>
                             <tr>
                                 <td>2025-02-08</td>
                                 <td><strong>Grace Akinyi</strong></td>
                                 <td>Tithe</td>
-                                <td class="fw-bold">7,500</td>
+                                <td class="fw-bold text-success">7,500</td>
                                 <td>Youth Service</td>
-                                <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 75%"></div></div></td>
                             </tr>
                             <tr>
                                 <td>2025-02-01</td>
                                 <td><strong>Peter Mwangi</strong></td>
                                 <td>Offering</td>
-                                <td class="fw-bold">3,000</td>
+                                <td class="fw-bold text-primary">3,000</td>
                                 <td>Sunday School</td>
-                                <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-primary" style="width: 60%"></div></div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -199,7 +179,21 @@
     </div>
 </div>
 
-<!-- Bootstrap Icons CDN -->
+<!-- Volunteer Participation -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-hand-thumbs-up-fill me-2"></i>Volunteer Participation</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="volunteerChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
@@ -209,20 +203,18 @@
     }
     .card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 20px rgba(0,0,0,0.15) !important;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     }
     .table tr:hover {
         background-color: rgba(0,123,255,0.05);
     }
     @media (max-width: 768px) {
         .display-5 { font-size: 2.5rem; }
-        .card-body h3 { font-size: 1.8rem; }
     }
 </style>
 
 <script>
-// All your existing Chart.js code remains exactly the same (copy-paste it here)
-new Chart(document.getElementById('pledgeChart'), { /* ... your pledge chart config ... */ });
-// ... (include all other charts as in your original code)
+// Your existing Chart.js code (pledgeChart, fundPie, groupChart, ageGroupChart, attendanceChart, donationLine, volunteerChart)
+// Paste all the chart configurations from your previous version here – they remain the same.
 </script>
 {% endblock %}
