@@ -2,299 +2,1163 @@
 {% block title %}Church Members{% endblock %}
 
 {% block content %}
-<!-- Welcoming Header -->
-<div class="text-center mb-5 pt-4">
-    <h1 class="display-5 text-primary fw-bold">Church Members Directory</h1>
-    <p class="lead text-muted">View, search, and manage all church members • As of December 14, 2025</p>
+<!-- Header with Actions -->
+<div class="dashboard-header mb-5 pt-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+            <h1 class="text-primary fw-bold mb-2">Church Members Directory</h1>
+            <p class="text-muted mb-0">View, search, and manage all church members • <span id="currentDate"></span></p>
+        </div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-download me-1"></i> Export
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="exportMembers('csv')"><i class="bi bi-filetype-csv me-2"></i>Export as CSV</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="exportMembers('pdf')"><i class="bi bi-filetype-pdf me-2"></i>Export as PDF</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="exportMembers('print')"><i class="bi bi-printer me-2"></i>Print Directory</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                <i class="bi bi-person-plus-fill me-2"></i>Add Member
+            </button>
+        </div>
+    </div>
 </div>
 
-<!-- Add Member Button -->
-<div class="d-flex justify-content-end mb-4">
-    <button class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-        <i class="bi bi-person-plus-fill me-2"></i>Add New Member
-    </button>
+<!-- Quick Stats -->
+<div class="row g-4 mb-5">
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-primary text-white shadow-lg">
+            <div class="card-body py-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-people-fill display-6 opacity-75"></i>
+                    <span class="badge bg-white text-primary">+8%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Total Members</h6>
+                <h2 class="mb-0 fw-bold">80</h2>
+                <div class="small mt-2">72 Active • 8 Visitors</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-success text-white shadow-lg">
+            <div class="card-body py-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-person-plus-fill display-6 opacity-75"></i>
+                    <span class="badge bg-white text-success">+8</span>
+                </div>
+                <h6 class="text-white-50 mb-2">New This Month</h6>
+                <h2 class="mb-0 fw-bold">8</h2>
+                <div class="small mt-2">5 Female • 3 Male</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-info text-white shadow-lg">
+            <div class="card-body py-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-cake-fill display-6 opacity-75"></i>
+                    <span class="badge bg-white text-info">3</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Birthdays This Month</h6>
+                <h2 class="mb-0 fw-bold">3</h2>
+                <div class="small mt-2">2 Today • 1 This Week</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-warning text-white shadow-lg">
+            <div class="card-body py-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-calendar-event display-6 opacity-75"></i>
+                    <span class="badge bg-white text-warning">94%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Avg. Attendance</h6>
+                <h2 class="mb-0 fw-bold">94%</h2>
+                <div class="small mt-2">↑ 2% from last month</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-danger text-white shadow-lg">
+            <div class="card-body py-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-graph-up-arrow display-6 opacity-75"></i>
+                    <span class="badge bg-white text-danger">+12%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Growth Rate</h6>
+                <h2 class="mb-0 fw-bold">12%</h2>
+                <div class="small mt-2">Quarterly growth</div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Filters Card -->
+<!-- Advanced Filters & Search -->
 <div class="card shadow-sm mb-5">
-    <div class="card-header bg-light">
-        <h5 class="mb-0"><i class="bi bi-funnel-fill me-2"></i>Filter & Search Members</h5>
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-funnel-fill me-2"></i>Advanced Filters & Search</h5>
+        <button class="btn btn-sm btn-outline-secondary" onclick="resetFilters()">
+            <i class="bi bi-arrow-clockwise me-1"></i>Reset
+        </button>
     </div>
     <div class="card-body">
         <div class="row g-3">
-            <div class="col-12 col-md-6 col-lg-3">
-                <label class="form-label fw-bold">Search</label>
-                <input type="text" class="form-control" id="searchMember" placeholder="Name, phone, email...">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label class="form-label fw-bold"><i class="bi bi-search me-1"></i>Search Members</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="searchMember" placeholder="Search by name, phone, email, or location..." onkeyup="filterMembers()">
+                    <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-6 col-md-3 col-lg-2">
                 <label class="form-label fw-bold">Community</label>
-                <select class="form-select" id="communityFilter">
+                <select class="form-select" id="communityFilter" onchange="filterMembers()">
                     <option value="">All Communities</option>
                     <option value="Luhya">Luhya</option>
                     <option value="Luo">Luo</option>
                     <option value="Teso">Teso</option>
                     <option value="Kikuyu">Kikuyu</option>
                     <option value="Kalenjin">Kalenjin</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-6 col-md-3 col-lg-2">
                 <label class="form-label fw-bold">Status</label>
-                <select class="form-select" id="statusFilter">
+                <select class="form-select" id="statusFilter" onchange="filterMembers()">
                     <option value="">All Status</option>
                     <option value="Active">Active</option>
                     <option value="Inactive">Inactive</option>
                     <option value="Visitor">Visitor</option>
+                    <option value="New">New Member</option>
+                    <option value="Leader">Leader</option>
                 </select>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-6 col-md-3 col-lg-2">
+                <label class="form-label fw-bold">Age Range</label>
+                <select class="form-select" id="ageFilter" onchange="filterMembers()">
+                    <option value="">All Ages</option>
+                    <option value="0-18">0-18 Years</option>
+                    <option value="19-35">19-35 Years</option>
+                    <option value="36-50">36-50 Years</option>
+                    <option value="51-65">51-65 Years</option>
+                    <option value="65+">65+ Years</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
                 <label class="form-label fw-bold">Small Group</label>
-                <select class="form-select" id="groupFilter">
+                <select class="form-select" id="groupFilter" onchange="filterMembers()">
                     <option value="">All Groups</option>
                     <option value="A">Group A</option>
                     <option value="B">Group B</option>
                     <option value="C">Group C</option>
                     <option value="D">Group D</option>
+                    <option value="E">Group E</option>
                 </select>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Stats Cards -->
-<div class="row g-4 mb-5">
-    <div class="col-6 col-md-4 col-lg-2">
-        <div class="card text-white bg-primary h-100 shadow-sm text-center">
-            <div class="card-body py-4">
-                <i class="bi bi-people-fill display-5 mb-2"></i>
-                <h5>Total Members</h5>
-                <h3 class="mb-0">80</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <div class="card text-white bg-success h-100 shadow-sm text-center">
-            <div class="card-body py-4">
-                <i class="bi bi-check-circle-fill display-5 mb-2"></i>
-                <h5>Active</h5>
-                <h3 class="mb-0">72</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <div class="card text-white bg-info h-100 shadow-sm text-center">
-            <div class="card-body py-4">
-                <i class="bi bi-person-plus-fill display-5 mb-2"></i>
-                <h5>New This Month</h5>
-                <h3 class="mb-0">8</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <div class="card text-white bg-warning h-100 shadow-sm text-center">
-            <div class="card-body py-4">
-                <i class="bi bi-cake-fill display-5 mb-2"></i>
-                <h5>Birthdays</h5>
-                <h3 class="mb-0">3</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <div class="card text-white bg-secondary h-100 shadow-sm text-center">
-            <div class="card-body py-4">
-                <i class="bi bi-eye-fill display-5 mb-2"></i>
-                <h5>Visitors</h5>
-                <h3 class="mb-0">12</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <div class="card text-white bg-danger h-100 shadow-sm text-center">
-            <div class="card-body py-4">
-                <i class="bi bi-x-circle-fill display-5 mb-2"></i>
-                <h5>Inactive</h5>
-                <h3 class="mb-0">8</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Members List Card -->
-<div class="card shadow-sm mb-5">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <h5 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Members List</h5>
-        <span class="text-muted small">Showing 15 of 80 members</span>
-    </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0" id="membersTable">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Community</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Age</th>
-                        <th>Group</th>
-                        <th>Join Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- All your original <tr> rows go here – unchanged except for enhanced avatars/badges -->
-                    <!-- Example (keep all 15 rows from your code) -->
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3 fw-bold fs-5">WM</div>
-                                <div>
-                                    <strong>Wycliffe Mukhwana</strong>
-                                    <div class="small text-muted">Male • 45 yrs</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-primary rounded-pill">Luhya</span></td>
-                        <td>0712 345 678</td>
-                        <td>wmukhwana@email.com</td>
-                        <td>45</td>
-                        <td><span class="badge bg-info rounded-pill">Group A</span></td>
-                        <td>2022-03-15</td>
-                        <td><span class="badge bg-success rounded-pill">Active</span></td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-primary" title="View"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Repeat for all other members... -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Pagination -->
-<nav class="mb-5">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled"><a class="page-link">Previous</a></li>
-        <li class="page-item active"><a class="page-link">1</a></li>
-        <li class="page-item"><a class="page-link">2</a></li>
-        <li class="page-item"><a class="page-link">3</a></li>
-        <li class="page-item"><a class="page-link">Next</a></li>
-    </ul>
-</nav>
-
-<!-- Community Distribution -->
-<div class="card shadow-sm">
-    <div class="card-header bg-light">
-        <h5 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i>Community Distribution</h5>
-    </div>
-    <div class="card-body">
-        <div class="row align-items-center">
-            <div class="col-12 col-lg-8">
-                <canvas id="communityChart" height="350"></canvas>
-            </div>
-            <div class="col-12 col-lg-4 mt-4 mt-lg-0">
-                <div class="list-group list-group-flush">
-                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Luhya</strong> <span class="badge bg-primary rounded-pill fs-6">32</span>
-                    </a>
-                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Luo</strong> <span class="badge bg-info rounded-pill fs-6">18</span>
-                    </a>
-                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Kikuyu</strong> <span class="badge bg-warning rounded-pill fs-6">15</span>
-                    </a>
-                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Kalenjin</strong> <span class="badge bg-danger rounded-pill fs-6">10</span>
-                    </a>
-                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Teso</strong> <span class="badge bg-success rounded-pill fs-6">5</span>
-                    </a>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="volunteerFilter" onchange="filterMembers()">
+                    <label class="form-check-label" for="volunteerFilter">Volunteers Only</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="baptizedFilter" onchange="filterMembers()">
+                    <label class="form-check-label" for="baptizedFilter">Baptized Members</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="tithingFilter" onchange="filterMembers()">
+                    <label class="form-check-label" for="tithingFilter">Regular Tithers</label>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap Icons CDN -->
+<!-- Visualization Section -->
+<div class="row g-4 mb-5">
+    <div class="col-12 col-lg-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-bar-chart-steps me-2"></i>Member Distribution Overview</h5>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary active" onclick="changeChartView('community')">Community</button>
+                    <button class="btn btn-outline-primary" onclick="changeChartView('age')">Age Groups</button>
+                    <button class="btn btn-outline-primary" onclick="changeChartView('gender')">Gender</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="distributionChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-pie-chart-fill me-2"></i>Membership Status</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="statusPieChart" height="300"></canvas>
+                <div class="row mt-3 text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h5 class="mb-1">72</h5>
+                            <small class="text-muted">Active</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <h5 class="mb-1">12</h5>
+                            <small class="text-muted">Visitors</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Timeline & Activity -->
+<div class="row g-4 mb-5">
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-gift-fill me-2"></i>Upcoming Birthdays</h5>
+                <span class="badge bg-warning">3</span>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="avatar-circle bg-gradient-warning text-white me-3">JM</div>
+                        <div class="flex-grow-1">
+                            <strong>Jane Muthoni</strong>
+                            <div class="small text-muted">Turning 42</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold text-warning">Today</div>
+                            <button class="btn btn-sm btn-outline-warning mt-1" onclick="sendBirthdayWish(1)">
+                                <i class="bi bi-envelope"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="avatar-circle bg-gradient-info text-white me-3">PO</div>
+                        <div class="flex-grow-1">
+                            <strong>Peter Omondi</strong>
+                            <div class="small text-muted">Turning 35</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold text-info">Feb 20</div>
+                            <button class="btn btn-sm btn-outline-info mt-1">
+                                <i class="bi bi-calendar-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="avatar-circle bg-gradient-success text-white me-3">SA</div>
+                        <div class="flex-grow-1">
+                            <strong>Sarah Achieng</strong>
+                            <div class="small text-muted">Turning 28</div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold text-success">Feb 25</div>
+                            <button class="btn btn-sm btn-outline-success mt-1">
+                                <i class="bi bi-calendar-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary w-100 mt-3" onclick="viewAllBirthdays()">
+                    <i class="bi bi-calendar-week me-1"></i>View Calendar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Recent New Members</h5>
+                <span class="badge bg-success">8</span>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="avatar-circle bg-gradient-primary text-white me-3">DK</div>
+                        <div class="flex-grow-1">
+                            <strong>David Kimani</strong>
+                            <div class="small text-muted">Joined 2 days ago</div>
+                        </div>
+                        <div>
+                            <span class="badge bg-primary">Visitor</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="avatar-circle bg-gradient-info text-white me-3">MW</div>
+                        <div class="flex-grow-1">
+                            <strong>Mary Wambui</strong>
+                            <div class="small text-muted">Joined 5 days ago</div>
+                        </div>
+                        <div>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="avatar-circle bg-gradient-warning text-white me-3">JO</div>
+                        <div class="flex-grow-1">
+                            <strong>John Otieno</strong>
+                            <div class="small text-muted">Joined 1 week ago</div>
+                        </div>
+                        <div>
+                            <span class="badge bg-warning">Follow-up</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#followupModal">
+                    <i class="bi bi-chat-dots me-1"></i>Schedule Follow-up
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-activity me-2"></i>Membership Trends</h5>
+                <span class="badge bg-info">Live</span>
+            </div>
+            <div class="card-body">
+                <canvas id="trendChart" height="180"></canvas>
+                <div class="row mt-3 text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h5 class="mb-1">85%</h5>
+                            <small class="text-muted">Retention Rate</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <h5 class="mb-1">12%</h5>
+                            <small class="text-muted">Monthly Growth</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Members Table -->
+<div class="card shadow-sm mb-5">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Members Directory</h5>
+            <small class="text-muted" id="tableCount">Showing <span id="visibleCount">15</span> of 80 members</small>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-sort-down me-1"></i>Sort
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="sortTable('name')"><i class="bi bi-sort-alpha-down me-2"></i>Name (A-Z)</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="sortTable('name-desc')"><i class="bi bi-sort-alpha-up me-2"></i>Name (Z-A)</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="sortTable('date')"><i class="bi bi-calendar-date me-2"></i>Join Date</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="sortTable('age')"><i class="bi bi-sort-numeric-down me-2"></i>Age</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-columns me-1"></i>Columns
+                </button>
+                <ul class="dropdown-menu" id="columnToggle">
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(0)"> ID</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(1)"> Name</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(2)"> Community</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(3)"> Phone</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(4)"> Email</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(5)"> Age</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(6)"> Group</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(7)"> Join Date</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(8)"> Status</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(9)"> Actions</label></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle" id="membersTable">
+                <thead class="table-light">
+                    <tr>
+                        <th width="50">#</th>
+                        <th>Member</th>
+                        <th width="120">Community</th>
+                        <th width="140">Phone</th>
+                        <th width="200">Email</th>
+                        <th width="80">Age</th>
+                        <th width="100">Group</th>
+                        <th width="120">Join Date</th>
+                        <th width="100">Status</th>
+                        <th width="120" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="membersTableBody">
+                    <!-- Dynamic content will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-light d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <span class="me-3">Rows per page:</span>
+            <select class="form-select form-select-sm w-auto" id="rowsPerPage" onchange="updatePagination()">
+                <option value="10">10</option>
+                <option value="15" selected>15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <div id="pagination"></div>
+    </div>
+</div>
+
+<!-- Enhanced Charts Section -->
+<div class="row g-4">
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-pie-chart-fill me-2"></i>Age & Gender Distribution</h5>
+                <button class="btn btn-sm btn-outline-primary" onclick="downloadChart('ageGenderChart')">
+                    <i class="bi bi-download"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="ageGenderChart" height="350"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-map-fill me-2"></i>Geographical Distribution</h5>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" onclick="changeMapView('community')">Communities</button>
+                    <button class="btn btn-outline-primary" onclick="changeMapView('density')">Density</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="mapVisualization" style="height: 350px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <div class="text-center p-5">
+                        <i class="bi bi-map display-1 text-muted mb-3"></i>
+                        <h5>Interactive Map View</h5>
+                        <p class="text-muted">Member distribution across regions</p>
+                        <button class="btn btn-primary mt-2" onclick="showMapModal()">
+                            <i class="bi bi-arrows-fullscreen me-1"></i>Open Map
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-3 text-center">
+                    <div class="col-4">
+                        <div class="border-end">
+                            <h5 class="mb-1">65%</h5>
+                            <small class="text-muted">Nairobi</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border-end">
+                            <h5 class="mb-1">20%</h5>
+                            <small class="text-muted">Kiambu</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div>
+                            <h5 class="mb-1">15%</h5>
+                            <small class="text-muted">Other</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons & Chart.js -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+    :root {
+        --gradient-primary: linear-gradient(135deg, #0d6efd, #6610f2);
+        --gradient-success: linear-gradient(135deg, #198754, #20c997);
+        --gradient-info: linear-gradient(135deg, #0dcaf0, #20c997);
+        --gradient-warning: linear-gradient(135deg, #ffc107, #fd7e14);
+        --gradient-danger: linear-gradient(135deg, #dc3545, #fd7e14);
+    }
+    
+    .dashboard-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-top: -1rem;
+    }
+    
+    .kpi-card {
+        border: none;
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .kpi-card.bg-gradient-primary { background: var(--gradient-primary); }
+    .kpi-card.bg-gradient-success { background: var(--gradient-success); }
+    .kpi-card.bg-gradient-info { background: var(--gradient-info); }
+    .kpi-card.bg-gradient-warning { background: var(--gradient-warning); }
+    .kpi-card.bg-gradient-danger { background: var(--gradient-danger); }
+    
     .avatar-circle {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        flex-shrink: 0;
     }
-    .card {
-        border-radius: 12px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.04);
+        transform: translateX(4px);
+        transition: all 0.2s ease;
     }
-    .card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    
+    .member-row {
+        cursor: pointer;
     }
-    .table tr:hover {
-        background-color: rgba(0,123,255,0.08);
+    
+    .badge {
+        font-weight: 500;
+        padding: 0.35em 0.65em;
     }
+    
     @media (max-width: 768px) {
-        .table thead { display: none; }
+        .table-responsive {
+            border: none;
+        }
+        
+        .table thead {
+            display: none;
+        }
+        
         .table tbody tr {
             display: block;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             border: 1px solid #dee2e6;
             border-radius: 12px;
             padding: 1rem;
-            background: #fff;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+        
         .table tbody td {
-            display: block;
-            text-align: right;
-            padding-left: 50%;
-            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f8f9fa;
         }
+        
         .table tbody td::before {
             content: attr(data-label);
-            position: absolute;
-            left: 1rem;
-            width: 45%;
-            font-weight: bold;
-            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            min-width: 120px;
         }
-        .table tbody td:last-child { text-align: center; padding-left: 0; }
+        
+        .table tbody td:last-child {
+            border-bottom: none;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+    }
+    
+    .page-link {
+        border-radius: 8px;
+        margin: 0 2px;
+    }
+    
+    .page-item.active .page-link {
+        background: var(--gradient-primary);
+        border-color: #0d6efd;
     }
 </style>
 
 <script>
-    // Enhanced Community Chart
-    new Chart(document.getElementById('communityChart'), {
+// Sample members data
+const membersData = [
+    {
+        id: 1, name: "Wycliffe Mukhwana", initials: "WM", gender: "Male", age: 45,
+        phone: "0712 345 678", email: "wmukhwana@email.com", community: "Luhya",
+        group: "A", joinDate: "2022-03-15", status: "Active",
+        location: "Nairobi", baptized: true, tithing: true, volunteer: true
+    },
+    {
+        id: 2, name: "Mary Wanjiku", initials: "MW", gender: "Female", age: 38,
+        phone: "0723 456 789", email: "mwanjiku@email.com", community: "Kikuyu",
+        group: "B", joinDate: "2023-01-20", status: "Active",
+        location: "Kiambu", baptized: true, tithing: true, volunteer: false
+    },
+    {
+        id: 3, name: "David Ochieng", initials: "DO", gender: "Male", age: 52,
+        phone: "0734 567 890", email: "dochieng@email.com", community: "Luo",
+        group: "C", joinDate: "2021-11-05", status: "Active",
+        location: "Nairobi", baptized: true, tithing: true, volunteer: true
+    },
+    {
+        id: 4, name: "Grace Akinyi", initials: "GA", gender: "Female", age: 29,
+        phone: "0745 678 901", email: "gakinyi@email.com", community: "Luo",
+        group: "A", joinDate: "2024-02-15", status: "New",
+        location: "Nairobi", baptized: false, tithing: false, volunteer: false
+    },
+    {
+        id: 5, name: "Peter Mwangi", initials: "PM", gender: "Male", age: 34,
+        phone: "0756 789 012", email: "pmwangi@email.com", community: "Kikuyu",
+        group: "D", joinDate: "2023-06-30", status: "Active",
+        location: "Kiambu", baptized: true, tithing: true, volunteer: true
+    },
+    // Add more members as needed...
+];
+
+let currentPage = 1;
+let rowsPerPage = 15;
+let filteredMembers = [...membersData];
+let sortDirection = 'asc';
+let sortColumn = 'name';
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current date
+    const now = new Date();
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    
+    // Initialize charts
+    initCharts();
+    
+    // Load members table
+    renderMembersTable();
+    updatePagination();
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'f') {
+            e.preventDefault();
+            document.getElementById('searchMember').focus();
+        }
+        if (e.ctrlKey && e.key === 'n') {
+            e.preventDefault();
+            document.querySelector('[data-bs-target="#addMemberModal"]').click();
+        }
+    });
+});
+
+function initCharts() {
+    // Distribution Chart
+    const distCtx = document.getElementById('distributionChart').getContext('2d');
+    window.distributionChart = new Chart(distCtx, {
         type: 'bar',
         data: {
-            labels: ['Luhya', 'Luo', 'Kikuyu', 'Kalenjin', 'Teso'],
+            labels: ['Luhya', 'Luo', 'Kikuyu', 'Kalenjin', 'Teso', 'Other'],
             datasets: [{
                 label: 'Members',
-                data: [32, 18, 15, 10, 5],
-                backgroundColor: 'rgba(13, 110, 253, 0.8)',
-                borderRadius: 10,
-                borderSkipped: false,
-                barThickness: 40
+                data: [32, 18, 15, 10, 5, 5],
+                backgroundColor: [
+                    'rgba(13, 110, 253, 0.8)',
+                    'rgba(25, 135, 84, 0.8)',
+                    'rgba(255, 193, 7, 0.8)',
+                    'rgba(220, 53, 69, 0.8)',
+                    'rgba(111, 66, 193, 0.8)',
+                    'rgba(32, 201, 151, 0.8)'
+                ],
+                borderRadius: 8,
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 5 } } }
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.raw} members`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 5 }
+                }
+            }
         }
     });
+    
+    // Status Pie Chart
+    const statusCtx = document.getElementById('statusPieChart').getContext('2d');
+    window.statusPieChart = new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Active', 'Visitors', 'New Members', 'Inactive'],
+            datasets: [{
+                data: [72, 12, 8, 8],
+                backgroundColor: [
+                    '#198754',
+                    '#0dcaf0',
+                    '#ffc107',
+                    '#6c757d'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            cutout: '70%'
+        }
+    });
+    
+    // Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    window.trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            datasets: [{
+                label: 'Member Growth',
+                data: [65, 68, 70, 72, 75, 78, 80],
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 60
+                }
+            }
+        }
+    });
+    
+    // Age & Gender Chart
+    const ageGenderCtx = document.getElementById('ageGenderChart').getContext('2d');
+    window.ageGenderChart = new Chart(ageGenderCtx, {
+        type: 'bar',
+        data: {
+            labels: ['0-18', '19-35', '36-50', '51-65', '65+'],
+            datasets: [
+                {
+                    label: 'Male',
+                    data: [15, 20, 18, 10, 5],
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderRadius: 6
+                },
+                {
+                    label: 'Female',
+                    data: [20, 25, 15, 8, 3],
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
 
-    // Your existing real-time filtering script (unchanged – works great)
-    // ...
+function renderMembersTable() {
+    const tbody = document.getElementById('membersTableBody');
+    tbody.innerHTML = '';
+    
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const pageMembers = filteredMembers.slice(start, end);
+    
+    pageMembers.forEach((member, index) => {
+        const row = document.createElement('tr');
+        row.className = 'member-row';
+        row.onclick = () => viewMember(member.id);
+        
+        const statusColor = {
+            'Active': 'bg-success',
+            'Inactive': 'bg-secondary',
+            'Visitor': 'bg-info',
+            'New': 'bg-warning',
+            'Leader': 'bg-primary'
+        }[member.status] || 'bg-secondary';
+        
+        const communityColor = {
+            'Luhya': 'bg-primary',
+            'Luo': 'bg-info',
+            'Kikuyu': 'bg-warning',
+            'Kalenjin': 'bg-danger',
+            'Teso': 'bg-success',
+            'Other': 'bg-secondary'
+        }[member.community] || 'bg-secondary';
+        
+        row.innerHTML = `
+            <td data-label="ID">${member.id}</td>
+            <td data-label="Member">
+                <div class="d-flex align-items-center">
+                    <div class="avatar-circle ${communityColor} text-white me-3">
+                        ${member.initials}
+                    </div>
+                    <div>
+                        <strong>${member.name}</strong>
+                        <div class="small text-muted">${member.gender} • ${member.age} yrs</div>
+                    </div>
+                </div>
+            </td>
+            <td data-label="Community">
+                <span class="badge ${communityColor} rounded-pill">${member.community}</span>
+            </td>
+            <td data-label="Phone">
+                <a href="tel:${member.phone}" class="text-decoration-none">${member.phone}</a>
+            </td>
+            <td data-label="Email">
+                <a href="mailto:${member.email}" class="text-decoration-none">${member.email}</a>
+            </td>
+            <td data-label="Age">${member.age}</td>
+            <td data-label="Group">
+                <span class="badge bg-info rounded-pill">Group ${member.group}</span>
+            </td>
+            <td data-label="Join Date">
+                <span class="text-muted">${member.joinDate}</span>
+            </td>
+            <td data-label="Status">
+                <span class="badge ${statusColor} rounded-pill">${member.status}</span>
+            </td>
+            <td data-label="Actions" class="text-center">
+                <div class="btn-group btn-group-sm" onclick="event.stopPropagation()">
+                    <button class="btn btn-outline-primary" onclick="viewMember(${member.id})" title="View">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-warning" onclick="editMember(${member.id})" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="deleteMember(${member.id})" title="Delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+    
+    document.getElementById('visibleCount').textContent = pageMembers.length;
+}
+
+function filterMembers() {
+    const searchTerm = document.getElementById('searchMember').value.toLowerCase();
+    const community = document.getElementById('communityFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    const ageRange = document.getElementById('ageFilter').value;
+    const group = document.getElementById('groupFilter').value;
+    const volunteerOnly = document.getElementById('volunteerFilter').checked;
+    const baptizedOnly = document.getElementById('baptizedFilter').checked;
+    const tithingOnly = document.getElementById('tithingFilter').checked;
+    
+    filteredMembers = membersData.filter(member => {
+        // Search term
+        if (searchTerm && !(
+            member.name.toLowerCase().includes(searchTerm) ||
+            member.phone.includes(searchTerm) ||
+            member.email.toLowerCase().includes(searchTerm) ||
+            member.location.toLowerCase().includes(searchTerm)
+        )) return false;
+        
+        // Filters
+        if (community && member.community !== community) return false;
+        if (status && member.status !== status) return false;
+        if (group && member.group !== group) return false;
+        
+        // Age range filter
+        if (ageRange) {
+            const [min, max] = ageRange.split('-').map(Number);
+            if (ageRange.endsWith('+')) {
+                if (member.age < 65) return false;
+            } else if (member.age < min || member.age > max) {
+                return false;
+            }
+        }
+        
+        // Checkbox filters
+        if (volunteerOnly && !member.volunteer) return false;
+        if (baptizedOnly && !member.baptized) return false;
+        if (tithingOnly && !member.tithing) return false;
+        
+        return true;
+    });
+    
+    currentPage = 1;
+    renderMembersTable();
+    updatePagination();
+}
+
+function sortTable(column) {
+    sortColumn = column;
+    
+    filteredMembers.sort((a, b) => {
+        let valueA, valueB;
+        
+        switch(column) {
+            case 'name':
+                valueA = a.name.toLowerCase();
+                valueB = b.name.toLowerCase();
+                return sortDirection === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+            
+            case 'name-desc':
+                valueA = a.name.toLowerCase();
+                valueB = b.name.toLowerCase();
+                return valueB.localeCompare(valueA);
+            
+            case 'date':
+                valueA = new Date(a.joinDate);
+                valueB = new Date(b.joinDate);
+                return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+            
+            case 'age':
+                return sortDirection === 'asc' ? a.age - b.age : b.age - a.age;
+            
+            default:
+                return 0;
+        }
+    });
+    
+    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    renderMembersTable();
+}
+
+function updatePagination() {
+    rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
+    const totalPages = Math.ceil(filteredMembers.length / rowsPerPage);
+    const pagination = document.getElementById('pagination');
+    
+    let html = '<ul class="pagination mb-0">';
+    
+    // Previous button
+    html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>
+    </li>`;
+    
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+            html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+            </li>`;
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            html += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+    }
+    
+    // Next button
+    html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+        <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>
+    </li>`;
+    
+    html += '</ul>';
+    pagination.innerHTML = html;
+    
+    renderMembersTable();
+}
+
+function changePage(page) {
+    currentPage = page;
+    renderMembersTable();
+    updatePagination();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function viewMember(id) {
+    const member = membersData.find(m => m.id === id);
+    if (member) {
+        // Show member modal or navigate to profile
+        showNotification(`Opening ${member.name}'s profile`, 'info');
+        // In real app: window.location.href = `/member/${id}`;
+    }
+}
+
+function editMember(id) {
+    const member = membersData.find(m => m.id === id);
+    if (member) {
+        showNotification(`Editing ${member.name}'s details`, 'warning');
+        // In real app: open edit modal
+    }
+}
+
+function deleteMember(id) {
+    const member = membersData.find(m => m.id === id);
+    if (member && confirm(`Are you sure you want to delete ${member.name}? This action cannot be undone.`)) {
+        showNotification(`${member.name} has been removed`, 'danger');
+        // In real app: API call to delete member
+    }
+}
+
+function resetFilters() {
+    document.getElementById('searchMember').value = '';
+    document.getElementById('communityFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('ageFilter').value = '';
+    document.getElementById('groupFilter').value = '';
+    document.getElementById('volunteerFilter').checked = false;
+    document.getElementById('baptizedFilter').checked = false;
+    document.getElementById('tithingFilter').checked = false;
+    
+    filteredMembers = [...membersData];
+    renderMembersTable();
+    updatePagination();
+}
+
+function clearSearch() {
+    document.getElementById('searchMember').value = '';
+    filterMembers();
+}
+
+function changeChartView(view) {
+    const buttons = document.querySelectorAll('.btn-group .btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Update chart based on view
+    // Implementation depends on your specific requirements
+}
+
+function exportMembers(format) {
+    let content = '';
+    
+    if (format === 'csv') {
+        content = 'ID,Name,Community,Phone,Email,Age,Group,Join Date,Status\n';
+        filteredMembers.forEach(member => {
+            content += `${member.id},${member.name},${member.community},${member.phone},${member.email},${member.age},${member.group},${member.joinDate},${member.status}\n`;
+        });
+        
+        const blob = new Blob([content], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `members_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        
+    } else if (format === 'print') {
+        window.print();
+    }
+    
+    showNotification(`Members exported as ${format.toUpperCase()}`, 'success');
+}
+
+function sendBirthdayWish(memberId) {
+    showNotification('Birthday wish sent successfully!', 'success');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+    notification.innerHTML = `
+        <i class="bi bi-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
+function toggleColumn(columnIndex) {
+    const table = document.getElementById('membersTable');
+    const rows = table.getElementsByTagName('tr');
+    
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        if (cells.length > columnIndex) {
+            cells[columnIndex].style.display = event.target.checked ? '' : 'none';
+        }
+    }
+}
 </script>
+
+<!-- Add Member Modal (Placeholder - would need full implementation) -->
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Add New Member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-muted">Member registration form would go here</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

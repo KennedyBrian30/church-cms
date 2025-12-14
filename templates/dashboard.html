@@ -2,47 +2,94 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<!-- Welcoming Header -->
-<div class="text-center mb-5 pt-4">
-    <h1 class="display-5 text-primary fw-bold">Church Management Dashboard</h1>
-    <p class="lead text-muted">Key insights and metrics at a glance • As of December 14, 2025</p>
+<!-- Welcoming Header with Stats -->
+<div class="dashboard-header mb-5 pt-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+            <h1 class="text-primary fw-bold mb-2">Church Management Dashboard</h1>
+            <p class="text-muted mb-0">Key insights and metrics at a glance • <span id="currentDate"></span></p>
+        </div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+            <button class="btn btn-outline-primary" onclick="refreshDashboard()">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+            </button>
+            <button class="btn btn-primary" onclick="exportDashboard()">
+                <i class="bi bi-download me-1"></i> Export Report
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- KPI Cards -->
 <div class="row g-4 mb-5">
-    <div class="col-6 col-md-4 col-lg-3">
-        <div class="card text-white bg-success h-100 shadow-sm text-center">
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-success text-white shadow-lg h-100">
             <div class="card-body py-4">
-                <i class="bi bi-wallet2 display-5 mb-2"></i>
-                <h5>Total Pledged (2025)</h5>
-                <h3 class="mb-0">KES {{ "{:,.0f}".format(total_pledged|default(0)) }}</h3>
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-wallet2 display-6 opacity-75"></i>
+                    <span class="badge bg-white text-success">+12%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Total Pledged (2025)</h6>
+                <h2 class="mb-0 fw-bold">KES {{ "{:,.0f}".format(total_pledged|default(0)) }}</h2>
+                <div class="progress mt-3" style="height: 4px;">
+                    <div class="progress-bar bg-white" style="width: 85%"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-4 col-lg-3">
-        <div class="card text-white bg-info h-100 shadow-sm text-center">
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-info text-white shadow-lg h-100">
             <div class="card-body py-4">
-                <i class="bi bi-cash-stack display-5 mb-2"></i>
-                <h5>Received YTD</h5>
-                <h3 class="mb-0">KES {{ "{:,.0f}".format(total_given|default(0)) }}</h3>
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-cash-stack display-6 opacity-75"></i>
+                    <span class="badge bg-white text-info">+8%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Received YTD</h6>
+                <h2 class="mb-0 fw-bold">KES {{ "{:,.0f}".format(total_given|default(0)) }}</h2>
+                <div class="progress mt-3" style="height: 4px;">
+                    <div class="progress-bar bg-white" style="width: 67%"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-4 col-lg-3">
-        <div class="card text-white bg-warning h-100 shadow-sm text-center">
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-warning text-white shadow-lg h-100">
             <div class="card-body py-4">
-                <i class="bi bi-graph-up-arrow display-5 mb-2"></i>
-                <h5>Overall Progress</h5>
-                <h3 class="mb-0">{{ overall_pct|default(0) }}%</h3>
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-graph-up-arrow display-6 opacity-75"></i>
+                    <span class="badge bg-white text-warning">{{ overall_pct|default(0) }}%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Overall Progress</h6>
+                <h2 class="mb-0 fw-bold">{{ overall_pct|default(0) }}%</h2>
+                <div class="progress mt-3" style="height: 4px;">
+                    <div class="progress-bar bg-white" style="width: {{ overall_pct|default(0) }}%"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-6 col-md-4 col-lg-3">
-        <div class="card text-white bg-primary h-100 shadow-sm text-center">
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-primary text-white shadow-lg h-100">
             <div class="card-body py-4">
-                <i class="bi bi-people-fill display-5 mb-2"></i>
-                <h5>Active Members</h5>
-                <h3 class="mb-0">80</h3>
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-people-fill display-6 opacity-75"></i>
+                    <span class="badge bg-white text-primary">+5</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Active Members</h6>
+                <h2 class="mb-0 fw-bold">80</h2>
+                <div class="small mt-3">↑ 5 new this month</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl">
+        <div class="card kpi-card bg-gradient-danger text-white shadow-lg h-100">
+            <div class="card-body py-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <i class="bi bi-calendar-heart display-6 opacity-75"></i>
+                    <span class="badge bg-white text-danger">94%</span>
+                </div>
+                <h6 class="text-white-50 mb-2">Avg. Attendance</h6>
+                <h2 class="mb-0 fw-bold">94%</h2>
+                <div class="small mt-3">↑ 3% from last month</div>
             </div>
         </div>
     </div>
@@ -50,23 +97,39 @@
 
 <!-- Charts Section 1 -->
 <div class="row g-4 mb-5">
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-8">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-bar-chart-line-fill me-2"></i>2025 Pledge Progress by Member</h5>
+                <select class="form-select form-select-sm w-auto" id="pledgeSort">
+                    <option value="pledged">Sort by Pledged</option>
+                    <option value="progress">Sort by Progress</option>
+                    <option value="name">Sort by Name</option>
+                </select>
             </div>
             <div class="card-body">
-                <canvas id="pledgeChart" height="300"></canvas>
+                <canvas id="pledgeChart" height="350"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-4">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-pie-chart-fill me-2"></i>Fund Distribution (YTD)</h5>
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-pie-chart-fill me-2"></i>Fund Distribution</h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        This Month
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="changeFundPeriod('month')">This Month</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeFundPeriod('quarter')">This Quarter</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeFundPeriod('year')">This Year</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="card-body">
-                <canvas id="fundPie" height="300"></canvas>
+                <canvas id="fundPie" height="350"></canvas>
+                <div class="mt-3" id="pieLegend"></div>
             </div>
         </div>
     </div>
@@ -76,31 +139,40 @@
 <div class="row g-4 mb-5">
     <div class="col-12 col-md-6 col-lg-4">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-people me-2"></i>Members Per Group</h5>
+                <button class="btn btn-sm btn-outline-primary" onclick="toggleChartType('groupChart')">
+                    <i class="bi bi-arrow-repeat"></i>
+                </button>
             </div>
             <div class="card-body">
-                <canvas id="groupChart"></canvas>
+                <canvas id="groupChart" height="250"></canvas>
             </div>
         </div>
     </div>
     <div class="col-12 col-md-6 col-lg-4">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
-                <h5 class="mb-0"><i class="bi bi-cake2-fill me-2"></i>Membership by Age Group</h5>
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-cake2-fill me-2"></i>Age Distribution</h5>
+                <span class="badge bg-info">Avg: 42</span>
             </div>
             <div class="card-body">
-                <canvas id="ageGroupChart"></canvas>
+                <canvas id="ageGroupChart" height="250"></canvas>
             </div>
         </div>
     </div>
     <div class="col-12 col-md-12 col-lg-4">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-calendar-check-fill me-2"></i>Service Attendance</h5>
+                <select class="form-select form-select-sm w-auto" id="attendancePeriod">
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly" selected>Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                </select>
             </div>
             <div class="card-body">
-                <canvas id="attendanceChart"></canvas>
+                <canvas id="attendanceChart" height="250"></canvas>
             </div>
         </div>
     </div>
@@ -108,20 +180,76 @@
 
 <!-- Trend Charts & Recent Contributions -->
 <div class="row g-4 mb-5">
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-8">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-light">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-trend-up me-2"></i>Monthly Donation Trend (2025)</h5>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary active" onclick="changeTrendType('line')">Line</button>
+                    <button class="btn btn-outline-primary" onclick="changeTrendType('bar')">Bar</button>
+                </div>
             </div>
             <div class="card-body">
-                <canvas id="donationLine" height="250"></canvas>
+                <canvas id="donationLine" height="300"></canvas>
             </div>
         </div>
     </div>
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-activity me-2"></i>Quick Stats</h5>
+                <span class="badge bg-success">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <i class="bi bi-coin text-warning me-2"></i>
+                            <span>This Week's Giving</span>
+                        </div>
+                        <span class="fw-bold">KES 45,800</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <i class="bi bi-person-plus text-success me-2"></i>
+                            <span>New Members (30 days)</span>
+                        </div>
+                        <span class="fw-bold">5</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <i class="bi bi-calendar-event text-primary me-2"></i>
+                            <span>Upcoming Events</span>
+                        </div>
+                        <span class="badge bg-primary">3</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <i class="bi bi-chat-heart text-danger me-2"></i>
+                            <span>Prayer Requests</span>
+                        </div>
+                        <span class="badge bg-danger">12</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <i class="bi bi-hand-index-thumb text-info me-2"></i>
+                            <span>Volunteer Hours</span>
+                        </div>
+                        <span class="fw-bold">320 hrs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Contributions & Volunteer Participation -->
+<div class="row g-4">
     <div class="col-12 col-lg-6">
         <div class="card shadow-sm h-100">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-table me-2"></i>Recent Contributions</h5>
+                <a href="#" class="btn btn-sm btn-link">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -131,63 +259,70 @@
                                 <th>Date</th>
                                 <th>Member</th>
                                 <th>Type</th>
-                                <th>Amount (KES)</th>
-                                <th>Service</th>
+                                <th>Amount</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>2025-02-15</td>
-                                <td><strong>John Kamau</strong></td>
-                                <td>Tithe</td>
-                                <td class="fw-bold text-success">5,000</td>
-                                <td>Main Service</td>
+                            {% for contribution in recent_contributions %}
+                            <tr onclick="viewMember({{ contribution.member_id }})" style="cursor: pointer;">
+                                <td>{{ contribution.date }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                            <span class="text-white fw-bold">{{ contribution.initials }}</span>
+                                        </div>
+                                        <div>
+                                            <strong>{{ contribution.name }}</strong>
+                                            <div class="text-muted small">{{ contribution.group }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ contribution.type_color }}">{{ contribution.type }}</span>
+                                </td>
+                                <td class="fw-bold text-success">KES {{ "{:,.0f}".format(contribution.amount) }}</td>
+                                <td>
+                                    <span class="badge bg-{{ contribution.status_color }}">{{ contribution.status }}</span>
+                                </td>
                             </tr>
-                            <tr>
-                                <td>2025-02-15</td>
-                                <td><strong>Mary Wanjiku</strong></td>
-                                <td>Offering</td>
-                                <td class="fw-bold text-info">2,500</td>
-                                <td>Morning Service</td>
-                            </tr>
-                            <tr>
-                                <td>2025-02-08</td>
-                                <td><strong>David Ochieng</strong></td>
-                                <td>Development</td>
-                                <td class="fw-bold text-warning">10,000</td>
-                                <td>Main Service</td>
-                            </tr>
-                            <tr>
-                                <td>2025-02-08</td>
-                                <td><strong>Grace Akinyi</strong></td>
-                                <td>Tithe</td>
-                                <td class="fw-bold text-success">7,500</td>
-                                <td>Youth Service</td>
-                            </tr>
-                            <tr>
-                                <td>2025-02-01</td>
-                                <td><strong>Peter Mwangi</strong></td>
-                                <td>Offering</td>
-                                <td class="fw-bold text-primary">3,000</td>
-                                <td>Sunday School</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Volunteer Participation -->
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow-sm">
-            <div class="card-header bg-light">
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-hand-thumbs-up-fill me-2"></i>Volunteer Participation</h5>
+                <button class="btn btn-sm btn-outline-primary" onclick="downloadVolunteerReport()">
+                    <i class="bi bi-download me-1"></i> Report
+                </button>
             </div>
             <div class="card-body">
-                <canvas id="volunteerChart" height="200"></canvas>
+                <canvas id="volunteerChart" height="250"></canvas>
+                <div class="row mt-3 text-center">
+                    <div class="col-4">
+                        <div class="border-end">
+                            <h5 class="mb-1">85%</h5>
+                            <small class="text-muted">Engagement</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border-end">
+                            <h5 class="mb-1">42</h5>
+                            <small class="text-muted">Active Volunteers</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div>
+                            <h5 class="mb-1">94%</h5>
+                            <small class="text-muted">Satisfaction</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -195,26 +330,537 @@
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+    :root {
+        --gradient-success: linear-gradient(135deg, #198754, #20c997);
+        --gradient-primary: linear-gradient(135deg, #0d6efd, #6610f2);
+        --gradient-info: linear-gradient(135deg, #0dcaf0, #20c997);
+        --gradient-warning: linear-gradient(135deg, #ffc107, #fd7e14);
+        --gradient-danger: linear-gradient(135deg, #dc3545, #fd7e14);
+    }
+    
+    .dashboard-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-top: -1rem;
+    }
+    
+    .kpi-card {
+        border: none;
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .kpi-card.bg-gradient-success { background: var(--gradient-success); }
+    .kpi-card.bg-gradient-primary { background: var(--gradient-primary); }
+    .kpi-card.bg-gradient-info { background: var(--gradient-info); }
+    .kpi-card.bg-gradient-warning { background: var(--gradient-warning); }
+    .kpi-card.bg-gradient-danger { background: var(--gradient-danger); }
+    
     .card {
-        border-radius: 12px;
+        border-radius: 16px;
+        border: 1px solid #e9ecef;
         transition: all 0.3s ease;
     }
+    
     .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
-    .table tr:hover {
-        background-color: rgba(0,123,255,0.05);
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.04);
+        transform: translateX(4px);
+        transition: all 0.2s ease;
     }
+    
+    .avatar-sm {
+        width: 32px;
+        height: 32px;
+        font-size: 0.875rem;
+    }
+    
     @media (max-width: 768px) {
-        .display-5 { font-size: 2.5rem; }
+        .dashboard-header {
+            padding: 1.5rem;
+        }
+        
+        .kpi-card .display-6 {
+            font-size: 2rem;
+        }
+        
+        .card-header h5 {
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .kpi-card h2 {
+            font-size: 1.5rem;
+        }
+        
+        .btn-group {
+            flex-wrap: wrap;
+        }
+    }
+    
+    /* Print styles */
+    @media print {
+        .kpi-card, .card {
+            break-inside: avoid;
+            box-shadow: none !important;
+        }
     }
 </style>
 
 <script>
-// Your existing Chart.js code (pledgeChart, fundPie, groupChart, ageGroupChart, attendanceChart, donationLine, volunteerChart)
-// Paste all the chart configurations from your previous version here – they remain the same.
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current date
+    const now = new Date();
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    
+    // Initialize all charts
+    initCharts();
+    
+    // Add real-time updates
+    setInterval(updateLiveStats, 30000); // Update every 30 seconds
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'r') {
+            e.preventDefault();
+            refreshDashboard();
+        }
+        if (e.ctrlKey && e.key === 'e') {
+            e.preventDefault();
+            exportDashboard();
+        }
+    });
+});
+
+// Chart instances storage
+let chartInstances = {};
+
+function initCharts() {
+    // Destroy existing charts
+    Object.values(chartInstances).forEach(chart => chart.destroy());
+    
+    // 1. Pledge Progress Chart (Horizontal Bar)
+    const pledgeCtx = document.getElementById('pledgeChart').getContext('2d');
+    chartInstances.pledgeChart = new Chart(pledgeCtx, {
+        type: 'bar',
+        data: {
+            labels: ['John Kamau', 'Mary Wanjiku', 'David Ochieng', 'Grace Akinyi', 'Peter Mwangi', 'Sarah Auma', 'James Odhiambo'],
+            datasets: [{
+                label: 'Pledged',
+                data: [100000, 80000, 120000, 90000, 75000, 110000, 85000],
+                backgroundColor: 'rgba(13, 110, 253, 0.8)',
+                borderRadius: 8
+            }, {
+                label: 'Paid',
+                data: [85000, 65000, 95000, 75000, 60000, 92000, 70000],
+                backgroundColor: 'rgba(25, 135, 84, 0.8)',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: KES ${context.raw.toLocaleString()}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'KES ' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // 2. Fund Distribution Pie Chart
+    const fundCtx = document.getElementById('fundPie').getContext('2d');
+    chartInstances.fundPie = new Chart(fundCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Tithe', 'Offering', 'Building Fund', 'Missions', 'Special Projects'],
+            datasets: [{
+                data: [45, 25, 15, 10, 5],
+                backgroundColor: [
+                    '#198754',
+                    '#0dcaf0',
+                    '#6f42c1',
+                    '#fd7e14',
+                    '#20c997'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.raw}% (KES ${(context.raw * 10000).toLocaleString()})`;
+                        }
+                    }
+                }
+            },
+            cutout: '65%'
+        }
+    });
+    
+    // 3. Members Per Group Chart
+    const groupCtx = document.getElementById('groupChart').getContext('2d');
+    chartInstances.groupChart = new Chart(groupCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Youth', 'Men', 'Women', 'Children', 'Seniors'],
+            datasets: [{
+                label: 'Members',
+                data: [25, 18, 22, 35, 15],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    // 4. Age Group Chart
+    const ageCtx = document.getElementById('ageGroupChart').getContext('2d');
+    chartInstances.ageGroupChart = new Chart(ageCtx, {
+        type: 'polarArea',
+        data: {
+            labels: ['0-18', '19-35', '36-50', '51-65', '65+'],
+            datasets: [{
+                data: [35, 25, 20, 15, 5],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+    
+    // 5. Attendance Chart
+    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+    chartInstances.attendanceChart = new Chart(attendanceCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Attendance %',
+                data: [85, 88, 92, 90, 89, 91, 94, 93, 95, 92, 90, 94],
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 80,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // 6. Donation Trend Chart
+    const donationCtx = document.getElementById('donationLine').getContext('2d');
+    chartInstances.donationLine = new Chart(donationCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Total Donations (KES)',
+                data: [450000, 520000, 480000, 610000, 590000, 680000, 720000, 710000, 750000, 800000, 780000, 850000],
+                borderColor: '#198754',
+                backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Pledge Target (KES)',
+                data: [600000, 600000, 600000, 600000, 600000, 600000, 600000, 600000, 600000, 600000, 600000, 600000],
+                borderColor: '#ffc107',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: KES ${context.raw.toLocaleString()}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'KES ' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // 7. Volunteer Chart
+    const volunteerCtx = document.getElementById('volunteerChart').getContext('2d');
+    chartInstances.volunteerChart = new Chart(volunteerCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Ushering', 'Music', 'Teaching', 'Outreach', 'Maintenance', 'Counseling'],
+            datasets: [{
+                label: 'Participation Level',
+                data: [90, 85, 75, 80, 65, 70],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20,
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Interactive Functions
+function refreshDashboard() {
+    // Show loading state
+    const btn = event.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="bi bi-arrow-clockwise me-1 spin"></i> Refreshing...';
+    btn.disabled = true;
+    
+    // Simulate API call
+    setTimeout(() => {
+        initCharts();
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+        
+        // Show success notification
+        showNotification('Dashboard refreshed successfully!', 'success');
+    }, 1500);
+}
+
+function exportDashboard() {
+    // Create a printable version
+    const dashboardContent = document.querySelector('.container-fluid').innerHTML;
+    const printWindow = window.open('', '_blank');
+    
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Church Dashboard Report</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+                <style>
+                    body { padding: 20px; }
+                    .kpi-card { break-inside: avoid; }
+                    @media print {
+                        .no-print { display: none; }
+                        .card { border: 1px solid #ddd !important; }
+                    }
+                </style>
+            </head>
+            <body>
+                <h1 class="mb-4">Church Management Dashboard Report</h1>
+                <div class="text-muted mb-4">Generated on ${new Date().toLocaleString()}</div>
+                ${dashboardContent}
+                <div class="mt-4 text-muted small">
+                    <p>© 2025 Church Management System. All rights reserved.</p>
+                </div>
+            </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+    setTimeout(() => printWindow.print(), 500);
+}
+
+function changeTrendType(type) {
+    const lineBtn = document.querySelector('button[onclick="changeTrendType(\'line\')"]');
+    const barBtn = document.querySelector('button[onclick="changeTrendType(\'bar\')"]');
+    
+    lineBtn.classList.toggle('active', type === 'line');
+    barBtn.classList.toggle('active', type === 'bar');
+    
+    chartInstances.donationLine.config.type = type;
+    chartInstances.donationLine.update();
+}
+
+function toggleChartType(chartId) {
+    const chart = chartInstances[chartId];
+    const currentType = chart.config.type;
+    const newType = currentType === 'bar' ? 'pie' : 'bar';
+    
+    chart.config.type = newType;
+    chart.update();
+}
+
+function changeFundPeriod(period) {
+    const periods = {
+        month: [45, 25, 15, 10, 5],
+        quarter: [40, 30, 15, 10, 5],
+        year: [50, 20, 15, 10, 5]
+    };
+    
+    chartInstances.fundPie.data.datasets[0].data = periods[period];
+    chartInstances.fundPie.update();
+    
+    // Update dropdown text
+    const dropdownBtn = event.target.closest('.dropdown').querySelector('.dropdown-toggle');
+    dropdownBtn.textContent = period === 'month' ? 'This Month' : 
+                              period === 'quarter' ? 'This Quarter' : 'This Year';
+}
+
+function updateLiveStats() {
+    // Simulate live data updates
+    const stats = document.querySelectorAll('.list-group-item .fw-bold, .list-group-item .badge');
+    stats.forEach(stat => {
+        if (stat.classList.contains('badge')) {
+            const current = parseInt(stat.textContent);
+            if (!isNaN(current)) {
+                const change = Math.random() > 0.5 ? 1 : -1;
+                stat.textContent = Math.max(0, current + change);
+            }
+        }
+    });
+}
+
+function viewMember(memberId) {
+    // Navigate to member profile
+    window.location.href = `/member/${memberId}`;
+}
+
+function downloadVolunteerReport() {
+    showNotification('Downloading volunteer report...', 'info');
+    // In a real app, this would generate and download a PDF
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+    notification.innerHTML = `
+        <i class="bi bi-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
+// Add spin animation for refresh button
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+`;
+document.head.appendChild(style);
 </script>
 {% endblock %}
