@@ -3,21 +3,106 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="text-primary">Church Members</h1>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-        <i class="fas fa-user-plus"></i> Add New Member
-    </button>
+    <h1 class="text-primary mb-0">Church Members</h1>
+    <div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+            <i class="fas fa-user-plus d-none d-md-inline"></i> <span>Add Member</span>
+        </button>
+        <button class="btn btn-outline-primary ms-2 d-none d-md-inline" onclick="exportMembers()">
+            <i class="fas fa-download"></i>
+        </button>
+    </div>
 </div>
 
-<!-- Filters -->
-<div class="card mb-4">
+<!-- Mobile Search Bar -->
+<div class="d-md-none mb-3">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search members..." id="mobileSearch">
+        <button class="btn btn-outline-secondary" type="button" onclick="openMobileFilters()">
+            <i class="fas fa-filter"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Stats Cards - Mobile Responsive -->
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 g-md-3 mb-4">
+    <div class="col">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body p-2 p-md-3 text-center">
+                <div class="small opacity-90">Total Members</div>
+                <h4 class="mb-0">80</h4>
+                <div class="small opacity-75 mt-1">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body p-2 p-md-3 text-center">
+                <div class="small opacity-90">Active</div>
+                <h4 class="mb-0">72</h4>
+                <div class="small opacity-75 mt-1">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body p-2 p-md-3 text-center">
+                <div class="small opacity-90">New This Month</div>
+                <h4 class="mb-0">8</h4>
+                <div class="small opacity-75 mt-1">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body p-2 p-md-3 text-center">
+                <div class="small opacity-90">Birthdays</div>
+                <h4 class="mb-0">3</h4>
+                <div class="small opacity-75 mt-1">
+                    <i class="fas fa-birthday-cake"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-secondary text-white h-100">
+            <div class="card-body p-2 p-md-3 text-center">
+                <div class="small opacity-90">Visitors</div>
+                <h4 class="mb-0">12</h4>
+                <div class="small opacity-75 mt-1">
+                    <i class="fas fa-handshake"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card bg-danger text-white h-100">
+            <div class="card-body p-2 p-md-3 text-center">
+                <div class="small opacity-90">Inactive</div>
+                <h4 class="mb-0">8</h4>
+                <div class="small opacity-75 mt-1">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters - Desktop -->
+<div class="card mb-4 d-none d-md-block">
     <div class="card-body">
         <div class="row g-3">
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 <label class="form-label">Search Member</label>
-                <input type="text" class="form-control" id="searchMember" placeholder="Name or phone...">
+                <input type="text" class="form-control" id="searchMember" placeholder="Name, phone, talent...">
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-2">
                 <label class="form-label">Community</label>
                 <select class="form-select" id="communityFilter">
                     <option value="">All Communities</option>
@@ -28,8 +113,8 @@
                     <option value="Kalenjin">Kalenjin</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Membership Status</label>
+            <div class="col-lg-2">
+                <label class="form-label">Status</label>
                 <select class="form-select" id="statusFilter">
                     <option value="">All Status</option>
                     <option value="Active">Active</option>
@@ -37,7 +122,7 @@
                     <option value="Visitor">Visitor</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-2">
                 <label class="form-label">Small Group</label>
                 <select class="form-select" id="groupFilter">
                     <option value="">All Groups</option>
@@ -47,569 +132,442 @@
                     <option value="D">Group D</option>
                 </select>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Stats Cards -->
-<div class="row mb-4">
-    <div class="col-md-2">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h5 class="card-title">Total Members</h5>
-                <h2 class="mb-0">80</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <h5 class="card-title">Active</h5>
-                <h2 class="mb-0">72</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-info text-white">
-            <div class="card-body text-center">
-                <h5 class="card-title">New This Month</h5>
-                <h2 class="mb-0">8</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-warning text-white">
-            <div class="card-body text-center">
-                <h5 class="card-title">Birthdays</h5>
-                <h2 class="mb-0">3</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-secondary text-white">
-            <div class="card-body text-center">
-                <h5 class="card-title">Visitors</h5>
-                <h2 class="mb-0">12</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-danger text-white">
-            <div class="card-body text-center">
-                <h5 class="card-title">Inactive</h5>
-                <h2 class="mb-0">8</h2>
+            <div class="col-lg-3">
+                <label class="form-label">Talent/Hobby</label>
+                <select class="form-select" id="talentFilter">
+                    <option value="">All Talents</option>
+                    <option value="music">Music/Singing</option>
+                    <option value="teaching">Teaching</option>
+                    <option value="technical">Technical</option>
+                    <option value="sports">Sports</option>
+                    <option value="cooking">Cooking</option>
+                    <option value="crafts">Arts & Crafts</option>
+                    <option value="leadership">Leadership</option>
+                    <option value="writing">Writing</option>
+                </select>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Members Table -->
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover" id="membersTable">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Community</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Age</th>
-                        <th>Small Group</th>
-                        <th>Join Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Luhya Names -->
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    WM
-                                </div>
-                                <div>
-                                    <strong>Wycliffe Mukhwana</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-primary">Luhya</span></td>
-                        <td>0712 345 678</td>
-                        <td>wmukhwana@email.com</td>
-                        <td>45</td>
-                        <td><span class="badge bg-info">Group A</span></td>
-                        <td>2022-03-15</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-danger text-white me-3">
-                                    NW
-                                </div>
-                                <div>
-                                    <strong>Naomi Wangila</strong>
-                                    <div class="small text-muted">Female</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-primary">Luhya</span></td>
-                        <td>0713 456 789</td>
-                        <td>nwangila@email.com</td>
-                        <td>38</td>
-                        <td><span class="badge bg-success">Group B</span></td>
-                        <td>2021-06-22</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    BW
-                                </div>
-                                <div>
-                                    <strong>Benjamin Wanyonyi</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-primary">Luhya</span></td>
-                        <td>0714 567 890</td>
-                        <td>bwanyonyi@email.com</td>
-                        <td>52</td>
-                        <td><span class="badge bg-warning">Group C</span></td>
-                        <td>2020-11-10</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-danger text-white me-3">
-                                    SW
-                                </div>
-                                <div>
-                                    <strong>Sharon Wekesa</strong>
-                                    <div class="small text-muted">Female</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-primary">Luhya</span></td>
-                        <td>0715 678 901</td>
-                        <td>swekesa@email.com</td>
-                        <td>29</td>
-                        <td><span class="badge bg-info">Group A</span></td>
-                        <td>2023-02-14</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <!-- Luo Names -->
-                    <tr>
-                        <td>5</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    KO
-                                </div>
-                                <div>
-                                    <strong>Kennedy Omondi</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-info">Luo</span></td>
-                        <td>0716 789 012</td>
-                        <td>komondi@email.com</td>
-                        <td>41</td>
-                        <td><span class="badge bg-danger">Group D</span></td>
-                        <td>2021-09-05</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-danger text-white me-3">
-                                    AA
-                                </div>
-                                <div>
-                                    <strong>Alice Akinyi</strong>
-                                    <div class="small text-muted">Female</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-info">Luo</span></td>
-                        <td>0717 890 123</td>
-                        <td>aakinyi@email.com</td>
-                        <td>36</td>
-                        <td><span class="badge bg-success">Group B</span></td>
-                        <td>2022-07-18</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    OA
-                                </div>
-                                <div>
-                                    <strong>Odhiambo Awuor</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-info">Luo</span></td>
-                        <td>0718 901 234</td>
-                        <td>oawuor@email.com</td>
-                        <td>48</td>
-                        <td><span class="badge bg-warning">Group C</span></td>
-                        <td>2020-12-03</td>
-                        <td><span class="badge bg-secondary">Inactive</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <!-- Teso Names -->
-                    <tr>
-                        <td>8</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    PA
-                                </div>
-                                <div>
-                                    <strong>Peter Apaa</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-success">Teso</span></td>
-                        <td>0719 012 345</td>
-                        <td>papaa@email.com</td>
-                        <td>33</td>
-                        <td><span class="badge bg-info">Group A</span></td>
-                        <td>2023-04-20</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-danger text-white me-3">
-                                    MO
-                                </div>
-                                <div>
-                                    <strong>Mary Okiror</strong>
-                                    <div class="small text-muted">Female</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-success">Teso</span></td>
-                        <td>0720 123 456</td>
-                        <td>mokiror@email.com</td>
-                        <td>27</td>
-                        <td><span class="badge bg-danger">Group D</span></td>
-                        <td>2023-01-15</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <!-- Kikuyu Names -->
-                    <tr>
-                        <td>10</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    JK
-                                </div>
-                                <div>
-                                    <strong>John Kamau</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-warning">Kikuyu</span></td>
-                        <td>0721 234 567</td>
-                        <td>jkamau@email.com</td>
-                        <td>55</td>
-                        <td><span class="badge bg-success">Group B</span></td>
-                        <td>2019-08-12</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>11</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-danger text-white me-3">
-                                    MW
-                                </div>
-                                <div>
-                                    <strong>Mary Wanjiku</strong>
-                                    <div class="small text-muted">Female</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-warning">Kikuyu</span></td>
-                        <td>0722 345 678</td>
-                        <td>mwanjiku@email.com</td>
-                        <td>42</td>
-                        <td><span class="badge bg-warning">Group C</span></td>
-                        <td>2020-05-30</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>12</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    DM
-                                </div>
-                                <div>
-                                    <strong>David Mwangi</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-warning">Kikuyu</span></td>
-                        <td>0723 456 789</td>
-                        <td>dmwangi@email.com</td>
-                        <td>31</td>
-                        <td><span class="badge bg-info">Group A</span></td>
-                        <td>2022-11-25</td>
-                        <td><span class="badge bg-warning">Visitor</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <!-- Kalenjin Names -->
-                    <tr>
-                        <td>13</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    KC
-                                </div>
-                                <div>
-                                    <strong>Kipchoge Cheruiyot</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-danger">Kalenjin</span></td>
-                        <td>0724 567 890</td>
-                        <td>kcheruiyot@email.com</td>
-                        <td>39</td>
-                        <td><span class="badge bg-danger">Group D</span></td>
-                        <td>2021-10-08</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>14</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-danger text-white me-3">
-                                    JC
-                                </div>
-                                <div>
-                                    <strong>Jane Chepkoech</strong>
-                                    <div class="small text-muted">Female</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-danger">Kalenjin</span></td>
-                        <td>0725 678 901</td>
-                        <td>jchepkoech@email.com</td>
-                        <td>34</td>
-                        <td><span class="badge bg-success">Group B</span></td>
-                        <td>2022-06-14</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>15</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-circle bg-primary text-white me-3">
-                                    RR
-                                </div>
-                                <div>
-                                    <strong>Richard Rono</strong>
-                                    <div class="small text-muted">Male</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-danger">Kalenjin</span></td>
-                        <td>0726 789 012</td>
-                        <td>rrono@email.com</td>
-                        <td>47</td>
-                        <td><span class="badge bg-warning">Group C</span></td>
-                        <td>2020-02-28</td>
-                        <td><span class="badge bg-secondary">Inactive</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+<!-- Mobile View Tabs -->
+<div class="d-md-none mb-3">
+    <div class="card">
+        <div class="card-body p-0">
+            <ul class="nav nav-pills nav-fill" id="membersMobileTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-members-tab" data-bs-toggle="pill" data-bs-target="#all-members" type="button">
+                        <i class="fas fa-users me-1"></i>All
+                    </button>
                 </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="active-members-tab" data-bs-toggle="pill" data-bs-target="#active-members" type="button">
+                        <i class="fas fa-check-circle me-1"></i>Active
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="talents-tab" data-bs-toggle="pill" data-bs-target="#talents-view" type="button">
+                        <i class="fas fa-star me-1"></i>Talents
+                    </button>
                 </li>
             </ul>
-        </nav>
+        </div>
     </div>
 </div>
 
-<!-- Add Member Modal -->
+<!-- Members Table/Card Views -->
+<div class="tab-content d-md-none" id="membersMobileContent">
+    <!-- Mobile Card View -->
+    <div class="tab-pane fade show active" id="all-members" role="tabpanel">
+        <div id="mobileMembersList">
+            <!-- Cards will be loaded dynamically -->
+        </div>
+    </div>
+    
+    <div class="tab-pane fade" id="active-members" role="tabpanel">
+        <div id="mobileActiveMembers">
+            <!-- Active members cards -->
+        </div>
+    </div>
+    
+    <div class="tab-pane fade" id="talents-view" role="tabpanel">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">Members by Talent</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-music text-primary me-2"></i>
+                            Music & Singing
+                        </div>
+                        <span class="badge bg-primary rounded-pill">12</span>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-chalkboard-teacher text-success me-2"></i>
+                            Teaching
+                        </div>
+                        <span class="badge bg-success rounded-pill">8</span>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-tools text-info me-2"></i>
+                            Technical
+                        </div>
+                        <span class="badge bg-info rounded-pill">5</span>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-futbol text-warning me-2"></i>
+                            Sports
+                        </div>
+                        <span class="badge bg-warning rounded-pill">15</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Desktop Table View -->
+<div class="d-none d-md-block">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">All Members</h5>
+            <div class="d-flex gap-2">
+                <div class="input-group input-group-sm" style="width: 200px;">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search..." id="tableSearch">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="membersTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Community</th>
+                            <th class="d-none d-lg-table-cell">Contact</th>
+                            <th>Age</th>
+                            <th>Group</th>
+                            <th class="d-none d-lg-table-cell">Talents</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Luhya Names with Talents -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-primary text-white me-3">
+                                        WM
+                                    </div>
+                                    <div>
+                                        <strong>Wycliffe Mukhwana</strong>
+                                        <div class="small text-muted">Pastor</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-primary">Luhya</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <div>0712 345 678</div>
+                                <div class="small text-muted">wmukhwana@email.com</div>
+                            </td>
+                            <td>45</td>
+                            <td><span class="badge bg-info">Group A</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <span class="badge bg-primary">Preaching</span>
+                                <span class="badge bg-success">Leadership</span>
+                            </td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-danger text-white me-3">
+                                        NW
+                                    </div>
+                                    <div>
+                                        <strong>Naomi Wangila</strong>
+                                        <div class="small text-muted">Children's Ministry</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-primary">Luhya</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <div>0713 456 789</div>
+                                <div class="small text-muted">nwangila@email.com</div>
+                            </td>
+                            <td>38</td>
+                            <td><span class="badge bg-success">Group B</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <span class="badge bg-success">Teaching</span>
+                                <span class="badge bg-info">Crafts</span>
+                                <span class="badge bg-warning">Singing</span>
+                            </td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-primary text-white me-3">
+                                        BW
+                                    </div>
+                                    <div>
+                                        <strong>Benjamin Wanyonyi</strong>
+                                        <div class="small text-muted">Elder</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-primary">Luhya</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <div>0714 567 890</div>
+                                <div class="small text-muted">bwanyonyi@email.com</div>
+                            </td>
+                            <td>52</td>
+                            <td><span class="badge bg-warning">Group C</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <span class="badge bg-success">Leadership</span>
+                                <span class="badge bg-info">Counseling</span>
+                            </td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Luo Names with Talents -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-primary text-white me-3">
+                                        KO
+                                    </div>
+                                    <div>
+                                        <strong>Kennedy Omondi</strong>
+                                        <div class="small text-muted">Head Usher</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-info">Luo</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <div>0716 789 012</div>
+                                <div class="small text-muted">komondi@email.com</div>
+                            </td>
+                            <td>41</td>
+                            <td><span class="badge bg-danger">Group D</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <span class="badge bg-success">Leadership</span>
+                                <span class="badge bg-warning">Sports</span>
+                                <span class="badge bg-info">Event Planning</span>
+                            </td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle bg-danger text-white me-3">
+                                        AA
+                                    </div>
+                                    <div>
+                                        <strong>Alice Akinyi</strong>
+                                        <div class="small text-muted">Worship Leader</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-info">Luo</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <div>0717 890 123</div>
+                                <div class="small text-muted">aakinyi@email.com</div>
+                            </td>
+                            <td>36</td>
+                            <td><span class="badge bg-success">Group B</span></td>
+                            <td class="d-none d-lg-table-cell">
+                                <span class="badge bg-primary">Singing</span>
+                                <span class="badge bg-success">Piano</span>
+                                <span class="badge bg-warning">Songwriting</span>
+                            </td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Add more members with talents... -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Community Distribution Card -->
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Community Distribution</h5>
+        <button class="btn btn-sm btn-outline-primary d-none d-md-block" onclick="toggleChartView()">
+            <i class="fas fa-chart-bar"></i>
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div style="height: 200px;">
+                    <canvas id="communityChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-primary me-2">●</span>
+                            Luhya Community
+                        </div>
+                        <span class="badge bg-primary rounded-pill">32</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-info me-2">●</span>
+                            Luo Community
+                        </div>
+                        <span class="badge bg-info rounded-pill">18</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-warning me-2">●</span>
+                            Kikuyu Community
+                        </div>
+                        <span class="badge bg-warning rounded-pill">15</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-danger me-2">●</span>
+                            Kalenjin Community
+                        </div>
+                        <span class="badge bg-danger rounded-pill">10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Member Modal with Talents/Hobbies -->
 <div class="modal fade" id="addMemberModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Member</h5>
+                <h5 class="modal-title">Register New Member</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="memberForm">
                     <div class="row g-3">
+                        <!-- Personal Information -->
                         <div class="col-md-6">
-                            <label class="form-label">First Name</label>
+                            <label class="form-label">First Name *</label>
                             <input type="text" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Last Name</label>
+                            <label class="form-label">Last Name *</label>
                             <input type="text" class="form-control" required>
                         </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">Gender *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        
+                        <!-- Contact Information -->
+                        <div class="col-md-6">
+                            <label class="form-label">Phone Number *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+254</span>
+                                <input type="tel" class="form-control" placeholder="7XX XXX XXX" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control">
+                        </div>
+                        
+                        <!-- Church Information -->
                         <div class="col-md-6">
                             <label class="form-label">Community</label>
-                            <select class="form-select" required>
+                            <select class="form-select">
                                 <option value="">Select Community</option>
                                 <option value="Luhya">Luhya</option>
                                 <option value="Luo">Luo</option>
@@ -620,29 +578,10 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Gender</label>
-                            <select class="form-select" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Date of Birth</label>
-                            <input type="date" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Join Date</label>
+                            <label class="form-label">Join Date *</label>
                             <input type="date" class="form-control" required>
                         </div>
+                        
                         <div class="col-md-6">
                             <label class="form-label">Small Group</label>
                             <select class="form-select">
@@ -654,61 +593,181 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Membership Status</label>
+                            <label class="form-label">Membership Status *</label>
                             <select class="form-select" required>
                                 <option value="Active">Active</option>
                                 <option value="Visitor">Visitor</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
                         </div>
+                        
+                        <!-- Talents & Hobbies Section -->
                         <div class="col-12">
+                            <label class="form-label">Talents & Hobbies</label>
+                            <div class="small text-muted mb-2">Select talents/hobbies that could be used in ministry</div>
+                            
+                            <div class="row g-2 mb-3">
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentMusic">
+                                        <label class="form-check-label" for="talentMusic">
+                                            <i class="fas fa-music text-primary me-1"></i> Music/Singing
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentTeaching">
+                                        <label class="form-check-label" for="talentTeaching">
+                                            <i class="fas fa-chalkboard-teacher text-success me-1"></i> Teaching
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentTechnical">
+                                        <label class="form-check-label" for="talentTechnical">
+                                            <i class="fas fa-tools text-info me-1"></i> Technical
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentSports">
+                                        <label class="form-check-label" for="talentSports">
+                                            <i class="fas fa-futbol text-warning me-1"></i> Sports
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentCooking">
+                                        <label class="form-check-label" for="talentCooking">
+                                            <i class="fas fa-utensils text-danger me-1"></i> Cooking
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentCrafts">
+                                        <label class="form-check-label" for="talentCrafts">
+                                            <i class="fas fa-paint-brush text-purple me-1"></i> Arts & Crafts
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentLeadership">
+                                        <label class="form-check-label" for="talentLeadership">
+                                            <i class="fas fa-users text-success me-1"></i> Leadership
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="talentWriting">
+                                        <label class="form-check-label" for="talentWriting">
+                                            <i class="fas fa-pen text-info me-1"></i> Writing
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <label class="form-label">Other Talents (comma separated)</label>
+                            <input type="text" class="form-control" placeholder="e.g., Photography, Gardening, Public Speaking">
+                        </div>
+                        
+                        <!-- Additional Information -->
+                        <div class="col-md-6">
                             <label class="form-label">Residence</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" placeholder="Enter residential area">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Occupation</label>
+                            <input type="text" class="form-control" placeholder="Profession/Work">
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" rows="2" placeholder="Additional information about the member..."></textarea>
+                        </div>
+                        
+                        <!-- Consent Section -->
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="photoConsent" required>
+                                <label class="form-check-label" for="photoConsent">
+                                    I consent to photos being taken and used for church ministry purposes
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Save Member</button>
+                <button type="button" class="btn btn-primary" onclick="saveMember()">Save Member</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Community Distribution Card -->
-<div class="card mt-4">
-    <div class="card-header">
-        <h5 class="mb-0">Community Distribution</h5>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-8">
-                <canvas id="communityChart" height="200"></canvas>
+<!-- Mobile Filters Modal -->
+<div class="modal fade" id="mobileFiltersModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filter Members</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="col-md-4">
-                <div class="list-group">
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        Luhya Community
-                        <span class="badge bg-primary rounded-pill">32 members</span>
-                    </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        Luo Community
-                        <span class="badge bg-info rounded-pill">18 members</span>
-                    </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        Kikuyu Community
-                        <span class="badge bg-warning rounded-pill">15 members</span>
-                    </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        Kalenjin Community
-                        <span class="badge bg-danger rounded-pill">10 members</span>
-                    </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        Teso Community
-                        <span class="badge bg-success rounded-pill">5 members</span>
-                    </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Community</label>
+                    <select class="form-select" id="mobileCommunityFilter">
+                        <option value="">All Communities</option>
+                        <option value="Luhya">Luhya</option>
+                        <option value="Luo">Luo</option>
+                        <option value="Teso">Teso</option>
+                        <option value="Kikuyu">Kikuyu</option>
+                        <option value="Kalenjin">Kalenjin</option>
+                    </select>
                 </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="mobileStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Visitor">Visitor</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Small Group</label>
+                    <select class="form-select" id="mobileGroupFilter">
+                        <option value="">All Groups</option>
+                        <option value="A">Group A</option>
+                        <option value="B">Group B</option>
+                        <option value="C">Group C</option>
+                        <option value="D">Group D</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Talent</label>
+                    <select class="form-select" id="mobileTalentFilter">
+                        <option value="">All Talents</option>
+                        <option value="music">Music/Singing</option>
+                        <option value="teaching">Teaching</option>
+                        <option value="technical">Technical</option>
+                        <option value="sports">Sports</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="applyMobileFilters()">Apply Filters</button>
             </div>
         </div>
     </div>
@@ -742,6 +801,7 @@ new Chart(document.getElementById('communityChart'), {
     },
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: false
@@ -758,12 +818,104 @@ new Chart(document.getElementById('communityChart'), {
     }
 });
 
+// Generate mobile member cards
+function generateMobileCards() {
+    const members = [
+        {
+            id: 1,
+            name: "Wycliffe Mukhwana",
+            initials: "WM",
+            bgColor: "primary",
+            role: "Pastor",
+            community: "Luhya",
+            phone: "0712 345 678",
+            age: 45,
+            group: "A",
+            talents: ["Preaching", "Leadership"],
+            status: "Active"
+        },
+        {
+            id: 2,
+            name: "Naomi Wangila",
+            initials: "NW",
+            bgColor: "danger",
+            role: "Children's Ministry",
+            community: "Luhya",
+            phone: "0713 456 789",
+            age: 38,
+            group: "B",
+            talents: ["Teaching", "Crafts", "Singing"],
+            status: "Active"
+        },
+        // Add more member data...
+    ];
+    
+    const container = document.getElementById('mobileMembersList');
+    container.innerHTML = '';
+    
+    members.forEach(member => {
+        const card = document.createElement('div');
+        card.className = 'card mb-3';
+        card.innerHTML = `
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-circle bg-${member.bgColor} text-white me-3">
+                            ${member.initials}
+                        </div>
+                        <div>
+                            <h6 class="mb-0">${member.name}</h6>
+                            <small class="text-muted">${member.role}</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-${member.status === 'Active' ? 'success' : 'secondary'}">${member.status}</span>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="small text-muted">Community</div>
+                        <div class="fw-bold">${member.community}</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="small text-muted">Age</div>
+                        <div class="fw-bold">${member.age}</div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="small text-muted">Talents</div>
+                    <div>
+                        ${member.talents.map(talent => 
+                            `<span class="badge bg-light text-dark border me-1 mb-1">${talent}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-sm btn-outline-primary" onclick="viewMember(${member.id})">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" onclick="editMember(${member.id})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
 // Table filtering functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Generate mobile cards
+    generateMobileCards();
+    
+    // Desktop filters
     const searchInput = document.getElementById('searchMember');
     const communityFilter = document.getElementById('communityFilter');
     const statusFilter = document.getElementById('statusFilter');
     const groupFilter = document.getElementById('groupFilter');
+    const talentFilter = document.getElementById('talentFilter');
     const tableRows = document.querySelectorAll('#membersTable tbody tr');
     
     function filterTable() {
@@ -771,32 +923,157 @@ document.addEventListener('DOMContentLoaded', function() {
         const communityValue = communityFilter.value;
         const statusValue = statusFilter.value;
         const groupValue = groupFilter.value;
+        const talentValue = talentFilter.value;
         
         tableRows.forEach(row => {
-            const name = row.cells[1].textContent.toLowerCase();
-            const community = row.cells[2].textContent;
-            const status = row.cells[8].textContent;
-            const group = row.cells[6].textContent;
+            const name = row.cells[0].textContent.toLowerCase();
+            const community = row.cells[1].textContent;
+            const status = row.cells[6].textContent;
+            const group = row.cells[4].textContent;
+            const talents = row.cells[5] ? row.cells[5].textContent.toLowerCase() : '';
             
             const matchesSearch = name.includes(searchTerm) || 
-                                 row.cells[3].textContent.includes(searchTerm);
+                                 (row.cells[2] && row.cells[2].textContent.toLowerCase().includes(searchTerm));
             const matchesCommunity = !communityValue || community.includes(communityValue);
             const matchesStatus = !statusValue || status.includes(statusValue);
             const matchesGroup = !groupValue || group.includes(groupValue);
+            const matchesTalent = !talentValue || talents.includes(talentValue);
             
-            row.style.display = matchesSearch && matchesCommunity && matchesStatus && matchesGroup 
+            row.style.display = matchesSearch && matchesCommunity && matchesStatus && matchesGroup && matchesTalent 
                 ? '' : 'none';
         });
     }
     
-    searchInput.addEventListener('input', filterTable);
-    communityFilter.addEventListener('change', filterTable);
-    statusFilter.addEventListener('change', filterTable);
-    groupFilter.addEventListener('change', filterTable);
+    if (searchInput) searchInput.addEventListener('input', filterTable);
+    if (communityFilter) communityFilter.addEventListener('change', filterTable);
+    if (statusFilter) statusFilter.addEventListener('change', filterTable);
+    if (groupFilter) groupFilter.addEventListener('change', filterTable);
+    if (talentFilter) talentFilter.addEventListener('change', filterTable);
+    
+    // Mobile search
+    const mobileSearch = document.getElementById('mobileSearch');
+    if (mobileSearch) {
+        mobileSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('#mobileMembersList .card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('h6').textContent.toLowerCase();
+                const role = card.querySelector('.text-muted').textContent.toLowerCase();
+                const community = card.querySelector('.row .fw-bold').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || role.includes(searchTerm) || community.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Handle responsive behavior
+    handleResponsive();
+    window.addEventListener('resize', handleResponsive);
 });
+
+function handleResponsive() {
+    if (window.innerWidth < 768) {
+        document.querySelector('.d-none.d-md-block').style.display = 'none';
+        document.querySelector('.d-md-none').style.display = 'block';
+    } else {
+        document.querySelector('.d-none.d-md-block').style.display = 'block';
+        document.querySelector('.d-md-none').style.display = 'none';
+    }
+}
+
+function openMobileFilters() {
+    const modal = new bootstrap.Modal(document.getElementById('mobileFiltersModal'));
+    modal.show();
+}
+
+function applyMobileFilters() {
+    const community = document.getElementById('mobileCommunityFilter').value;
+    const status = document.getElementById('mobileStatusFilter').value;
+    const group = document.getElementById('mobileGroupFilter').value;
+    const talent = document.getElementById('mobileTalentFilter').value;
+    
+    // Apply filters to mobile cards
+    const cards = document.querySelectorAll('#mobileMembersList .card');
+    
+    cards.forEach(card => {
+        const cardCommunity = card.querySelector('.row .fw-bold').textContent;
+        const cardStatus = card.querySelector('.badge').textContent;
+        const cardGroup = card.textContent.includes('Group') ? card.textContent.match(/Group\s+[A-D]/)[0] : '';
+        const cardTalents = card.textContent;
+        
+        const matchesCommunity = !community || cardCommunity.includes(community);
+        const matchesStatus = !status || cardStatus.includes(status);
+        const matchesGroup = !group || cardGroup.includes(group);
+        const matchesTalent = !talent || cardTalents.toLowerCase().includes(talent.toLowerCase());
+        
+        if (matchesCommunity && matchesStatus && matchesGroup && matchesTalent) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    const modal = bootstrap.Modal.getInstance(document.getElementById('mobileFiltersModal'));
+    modal.hide();
+}
+
+function saveMember() {
+    // Collect form data
+    const form = document.getElementById('memberForm');
+    const formData = new FormData(form);
+    
+    // Collect talents
+    const talents = [];
+    const talentCheckboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+    talentCheckboxes.forEach(cb => {
+        talents.push(cb.nextElementSibling.textContent.trim());
+    });
+    
+    const otherTalents = form.querySelector('input[placeholder*="Other Talents"]').value;
+    if (otherTalents) {
+        otherTalents.split(',').forEach(talent => {
+            if (talent.trim()) talents.push(talent.trim());
+        });
+    }
+    
+    // Show success message
+    alert('Member registered successfully with talents: ' + talents.join(', '));
+    
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
+    modal.hide();
+    
+    // Reset form
+    form.reset();
+}
+
+function viewMember(id) {
+    alert(`View member details for ID: ${id}`);
+}
+
+function editMember(id) {
+    alert(`Edit member with ID: ${id}`);
+}
+
+function exportMembers() {
+    alert('Exporting members list...');
+}
+
+function toggleChartView() {
+    alert('Toggle between chart types');
+}
+
+// Touch-friendly enhancements
+document.addEventListener('touchstart', function() {}, {passive: true});
 </script>
 
 <style>
+/* Mobile-first responsive styles */
 .avatar-circle {
     width: 40px;
     height: 40px;
@@ -805,11 +1082,30 @@ document.addEventListener('DOMContentLoaded', function() {
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .avatar-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+    .card-body {
+        padding: 1rem;
+    }
+    .card-header {
+        padding: 0.75rem 1rem;
+    }
 }
 
 .badge {
     font-size: 0.75em;
     padding: 0.35em 0.65em;
+    font-weight: 500;
 }
 
 .table th {
@@ -817,21 +1113,114 @@ document.addEventListener('DOMContentLoaded', function() {
     background-color: #f8f9fa;
 }
 
-.table tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.05);
+.table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .table th, .table td {
+        padding: 0.5rem;
+    }
 }
 
 .list-group-item {
     border-left: none;
     border-right: none;
+    padding: 0.75rem 0;
 }
 
 .list-group-item:first-child {
     border-top: none;
+    padding-top: 0;
 }
 
 .list-group-item:last-child {
     border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Card styles */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Button group for actions */
+.btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Mobile navigation tabs */
+.nav-pills .nav-link {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 0;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #007bff;
+}
+
+/* Form controls */
+.form-check {
+    margin-bottom: 0.25rem;
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+/* Talent badges */
+.badge.bg-light.text-dark.border {
+    border: 1px solid #dee2e6 !important;
+}
+
+/* Touch-friendly elements */
+@media (max-width: 768px) {
+    .btn {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-link {
+        min-height: 44px;
+    }
+    
+    .form-control, .form-select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* Modal adjustments for mobile */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .modal-body {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn, .modal, .nav-pills {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
 }
 </style>
 {% endblock %}
