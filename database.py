@@ -1,7 +1,7 @@
 # database.py
 import sqlite3
 
-DB_NAME = "chms.db"
+DB_NAME = "/data/chms.db"
 
 def init_db():
     conn = sqlite3.connect(DB_NAME)
